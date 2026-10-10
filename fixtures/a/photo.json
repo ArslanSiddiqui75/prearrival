@@ -1,0 +1,15 @@
+{
+  "read_by": "human, from monitor.jpg",
+  "hr": 105,
+  "sbp": 120,
+  "dbp": 80,
+  "spo2": 96,
+  "also_visible_not_used": {"rr": 29, "etco2": 36, "temp_c": 35.3, "nibp_mean": 96},
+  "notes": "Tempus Pro, Spanish labels: FC lpm = heart rate, PSNI = non-invasive BP. HR 105 is the abnormal value (tachycardia, NEWS2 pulse 91-110 = 1). The photo is not of the Fixture A patient; it is a stand-in monitor read live by the vision model.",
+  "source": {
+    "page": "https://commons.wikimedia.org/wiki/File:Tempus_Pro_telemedicine_device.jpg",
+    "file": "https://upload.wikimedia.org/wikipedia/commons/7/74/Tempus_Pro_telemedicine_device.jpg",
+    "author": "Sistema d'Emergències Mèdiques (SEM)",
+    "license": "CC BY-SA (confirm version on the file page)"
+  }
+}

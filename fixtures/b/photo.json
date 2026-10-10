@@ -1,0 +1,15 @@
+{
+  "read_by": "human, from monitor.jpg",
+  "hr": 73,
+  "sbp": 129,
+  "dbp": 57,
+  "spo2": 100,
+  "also_visible_not_used": {"rr": 17, "nbp_mean": 73, "abp": "100/59 (75)"},
+  "notes": "Philips IntelliVue MP70. Use the non-invasive NBP 129/57 (large magenta, bottom), not the arterial line ABP 100/59 (red, middle). The photo is not of the Fixture B patient; it is a stand-in monitor read live by the vision model.",
+  "source": {
+    "page": "https://www.flickr.com/photos/53326337@N00/5646125118",
+    "file": "https://live.staticflickr.com/5064/5646125118_27ab17362d_b.jpg",
+    "author": "Quinn Dombrowski (quinn.anya)",
+    "license": "CC BY-SA 2.0"
+  }
+}

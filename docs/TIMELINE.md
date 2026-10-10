@@ -10,7 +10,7 @@ Four tracks run in parallel: speech, score, board, talk. One person can hold two
 
 Everyone clones `ArslanSiddiqui75/prearrival`, creates a venv, and copies `.env.example` to `.env`.
 
-- Speech puts `OPENAI_API_KEY` in `.env` and confirms one cloud call returns text.
+- Speech puts `GROQ_API_KEY` in `.env` and confirms one cloud call returns text. (Provider switched from OpenAI to Groq on 2026-10-10; see context.md.)
 - Score reads SRS sections 6–8 and runs `pytest` once, expecting red.
 - Board runs `streamlit run app.py` and sees the shell.
 - Talk reads `talk/SCRIPT.md` and `docs/AICON.md`.
