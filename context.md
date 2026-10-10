@@ -78,6 +78,7 @@ See [progress.md](progress.md) for the task checklist. Headline as of the last u
 
 Newest first. One or two lines per session: what changed, what's next.
 
-- 2026-10-10 10:55 PKT — Implemented news/decide (12 tests pass), Groq calls (untested live, no key yet), board, and switched to Groq. Added fixture photos and photo.json. Push is blocked until KodeeBz accepts the repo invite. pip is slow on this network.
+- 2026-10-10 11:05 PKT — Accepted the repo invite as KodeeBz and pushed `machine/adan`. Push from this machine with `flatpak-spawn --host git push`, because VS Code runs in a Flatpak sandbox and gh only exists on the host.
+- 2026-10-10 10:55 PKT — Implemented news/decide (12 tests pass), Groq calls (untested live, no key yet), board, and switched to Groq. Added fixture photos and photo.json. pip is slow on this network.
 - 2026-10-10 10:35 PKT — Created branch `machine/adan` and pushed the context files. User chose Groq and sourced sample media. Searching for monitor photos next.
 - 2026-10-10 10:20 PKT — Cloned repo (user GitHub: KodeeBz). Read all docs + stubs. Created `context.md`, `progress.md`, `CLAUDE.md`. No code changes yet.
