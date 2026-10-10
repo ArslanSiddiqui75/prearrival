@@ -1,5 +1,6 @@
 """PreArrival ER board. Imports decide and score_news. Does not reimplement thresholds."""
 
+import json
 from pathlib import Path
 
 import streamlit as st
@@ -89,7 +90,12 @@ with left:
     else:
         st.warning(f"Missing {audio.relative_to(ROOT)}")
     if photos:
-        st.image(str(photos[0]), caption="Monitor photo")
+        caption = "Monitor photo (stand-in, not this patient)"
+        meta = folder / "photo.json"
+        if meta.exists():
+            src = json.loads(meta.read_text()).get("source", {})
+            caption += f" — {src.get('author', '')}, {src.get('license', '')}"
+        st.image(str(photos[0]), caption=caption)
     else:
         st.warning(f"Missing {folder.relative_to(ROOT)}/monitor.jpg")
 

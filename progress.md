@@ -22,8 +22,8 @@ Task checklist against the clock in [docs/SRS.md](docs/SRS.md) §16. Tick items 
 - [x] `transcribe` → cloud STT, returns text + requested_at
 - [x] `read_monitor` → cloud vision, nulls for unreadable values, evidence, requested_at
 - [x] `extract_note` → cloud model, schema fields + evidence quotes, nulls when absent
-- [ ] Fixture A: `audio.wav`, `monitor.jpg` (abnormal HR or SBP), `photo.json`
-- [ ] Fixture B: `audio.wav`, `monitor.jpg` (normal HR, SBP, SpO2), `photo.json`
+- [ ] Fixture A: `audio.wav` (todo, TTS) · [x] `monitor.jpg` Tempus Pro, HR 105 · [x] `photo.json`
+- [ ] Fixture B: `audio.wav` (todo, TTS) · [x] `monitor.jpg` IntelliVue, NBP 129/57 · [x] `photo.json`
 - [ ] Both fixtures return live JSON matching `expected.json`
 
 ## Board (`app.py`)
@@ -58,3 +58,5 @@ Task checklist against the clock in [docs/SRS.md](docs/SRS.md) §16. Tick items 
 - Speech, vision and extraction code is written against Groq but **not yet run live**. It needs `GROQ_API_KEY`.
 - The literature figure in `app.py` (`LITERATURE`) needs checking by the talk owner before the demo.
 - `audio.wav` plan: generate it from `note.txt` with TTS (Groq Orpheus or an offline engine). No public dataset has our scripts.
+- With the human-read photo numbers, the rules give A = P1 (resus bay, CT, senior review) and B = P3 (cubicle, limb x-ray), matching `expected.json`.
+- Fixture B risk: the photo also shows an arterial line at 100/59. The vision prompt says to prefer the cuff NBP. Watch this on the first live run.

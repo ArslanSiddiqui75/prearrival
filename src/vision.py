@@ -11,6 +11,8 @@ Return only a JSON object with exactly these keys:
  "evidence": {"<field>": "<where on screen and what you read, e.g. 'green HR box: 132'>"}}
 
 hr = heart rate / pulse (bpm). sbp/dbp = non-invasive blood pressure systolic/diastolic (mmHg, usually shown as 120/80). spo2 = oxygen saturation (%).
+Labels may be abbreviated or in another language (e.g. FC = heart rate, PSNI = non-invasive BP, S/D = systolic/diastolic). The number in parentheses next to a BP is the mean; do not use it as sbp or dbp.
+If both a non-invasive cuff pressure (NBP, NIBP, PSNI) and an invasive arterial pressure (ABP, ART, IBP) are shown, use the non-invasive cuff pressure for sbp and dbp.
 Include an evidence entry only for fields that are not null."""
 
 
