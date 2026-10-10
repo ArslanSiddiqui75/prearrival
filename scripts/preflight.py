@@ -2,6 +2,7 @@
 
     python scripts/preflight.py          # Fixture A only (3 cloud calls)
     python scripts/preflight.py a b      # both fixtures
+    python scripts/preflight.py --offline a b   # tracking check only, no network
 
 Uses the same functions as the board. Prints PASS or FAIL per check and exits non-zero on any failure.
 """
@@ -64,7 +65,34 @@ def run_fixture(fx):
     )
 
 
+def tracking_check(fixtures):
+    """Offline: simulated route ETA vs spoken ETA, and what a roadblock at the start would offer."""
+    from src.route import load_graph
+    from src.tracking import new_sim, sim_answer, sim_inject, total_min
+
+    graph = load_graph()
+    for fx in fixtures:
+        spoken = json.loads((ROOT / "fixtures" / fx / "expected.json").read_text())["from_note"]["eta_min"]
+        sim = new_sim(graph, fx, "preflight", now=0.0)
+        route_eta = total_min(sim["route"])
+        check(f"tracking {fx}: route ETA {route_eta:g} min vs spoken {spoken} min", abs(route_eta - spoken) <= 1,
+              " -> ".join(sim["route"]["route"]))
+        for kind in ("closed", "slow"):
+            hit = sim_inject(sim, graph, kind, now=0.0)
+            line = hit.get("alert") or hit["status"]
+            if hit["pending"]:
+                line += " | Accept: " + sim_answer(hit, graph, True, now=0.0)["status"]
+            print(f"      {kind} at start: {line}")
+
+
 def main():
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    fixtures = args or ["a"]
+    tracking_check(fixtures)
+    if "--offline" in sys.argv:
+        print("\nREADY (offline tracking check)" if not failed else "\nNOT READY — fix the FAIL lines above")
+        sys.exit(1 if failed else 0)
+
     try:
         available = {m.id for m in client().models.list().data}
         check("GROQ_API_KEY works", True)
@@ -74,7 +102,7 @@ def main():
     for model in (STT_MODEL, VISION_MODEL, TEXT_MODEL):
         check(f"model available: {model}", model in available)
 
-    for fx in sys.argv[1:] or ["a"]:
+    for fx in fixtures:
         try:
             run_fixture(fx)
         except Exception as e:

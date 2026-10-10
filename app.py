@@ -2,6 +2,7 @@
 
 import json
 import tempfile
+import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -11,6 +12,8 @@ import streamlit as st
 from src.confidence import compute_flags, confirm_with_crew
 from src.decide import decide
 from src.news import PARAMS, score_news
+from src.route import load_graph, node
+from src.tracking import new_sim, sim_answer, sim_inject, sim_position, total_min
 
 ROOT = Path(__file__).parent
 MIC_PATH = Path(tempfile.gettempdir()) / "prearrival_mic.wav"
@@ -37,6 +40,8 @@ LABELS = {
 NOTE_KEYS = ("consciousness", "mechanism", "eta_min", "on_oxygen", "rr", "temp_c")
 MONITOR_KEYS = ("hr", "sbp", "dbp", "spo2")
 AMBER = "#b26a00"
+SIM_LABEL = "SIMULATED POSITION · SIMULATED ROADBLOCK"
+ETA_GAP_MIN = 3  # show route and spoken ETA side by side when they differ by more than this
 PRIORITY_COLOR = {"P1": "#c62828", "P2": "#ef6c00", "P3": "#2e7d32"}
 
 # Layout check only. The board labels this as not live.
@@ -60,6 +65,9 @@ st.markdown(
       .leadtime {font-size: 2.4rem; font-weight: 700;}
       .stamp {font-family: monospace; font-size: 1.1rem;}
       .safety {font-size: 1.3rem; font-style: italic;}
+      .simlabel {background: #b26a00; color: white; font-weight: 800; letter-spacing: .08em;
+                 padding: .3em .7em; border-radius: 6px; display: inline-block;}
+      .countdown {font-size: 2.4rem; font-weight: 700; font-variant-numeric: tabular-nums;}
     </style>
     """,
     unsafe_allow_html=True,
@@ -87,6 +95,50 @@ def run_live(folder: Path, audio_path: Path) -> dict:
         "note extraction": note["requested_at"],
     }
     return {"fields": fields, "transcript": heard["text"], "stamps": stamps}
+
+
+def tracking_map(sim: dict, graph: dict, pos: dict):
+    import pydeck as pdk
+
+    def path(legs):
+        if not legs:
+            return []
+        pts = [node(graph, legs[0]["from"])] + [node(graph, leg["to"]) for leg in legs]
+        return [[p["lon"], p["lat"]] for p in pts]
+
+    def seg_path(seg_id):
+        seg = next(x for x in graph["segments"] if x["id"] == seg_id)
+        return [[node(graph, seg[e])["lon"], node(graph, seg[e])["lat"]] for e in ("from", "to")]
+
+    paths = [{"path": path(sim["route"]["legs"]), "color": [31, 95, 139], "width": 7, "label": "Current route"}]
+    if sim["pending"]:
+        paths.append({"path": path(sim["pending"]["offer"]["alternate"]["legs"]), "color": [230, 126, 34], "width": 7, "label": "Alternate offered"})
+    paths += [{"path": seg_path(x), "color": [198, 40, 40], "width": 11, "label": "Road closed (simulated)"} for x in sim["closed"]]
+    paths += [{"path": seg_path(x), "color": [198, 40, 40], "width": 11, "label": "Heavy traffic (simulated)"} for x in sim["slow"]]
+    dest = node(graph, graph["destination"])
+    points = [
+        {"lon": dest["lon"], "lat": dest["lat"], "color": [46, 125, 50], "radius": 110, "label": "Hospital: " + dest["name"]},
+        {"lon": pos["lon"], "lat": pos["lat"], "color": [21, 21, 21], "radius": 130, "label": "Ambulance (simulated)"},
+    ]
+    lats = [n["lat"] for n in graph["nodes"]]
+    lons = [n["lon"] for n in graph["nodes"]]
+    return pdk.Deck(
+        layers=[
+            pdk.Layer("PathLayer", paths, get_path="path", get_color="color", get_width="width",
+                      width_units="pixels", pickable=True),
+            pdk.Layer("ScatterplotLayer", points, get_position="[lon, lat]", get_fill_color="color",
+                      get_radius="radius", radius_min_pixels=7, pickable=True),
+            pdk.Layer("TextLayer", [{"lon": dest["lon"], "lat": dest["lat"], "text": "H"}], get_position="[lon, lat]",
+                      get_text="text", get_size=18, get_color=[255, 255, 255]),
+        ],
+        initial_view_state=pdk.ViewState(latitude=sum(lats) / len(lats), longitude=sum(lons) / len(lons), zoom=12.2),
+        tooltip={"text": "{label}"},
+    )
+
+
+def fmt_mmss(minutes: float) -> str:
+    secs = max(0, round(minutes * 60))
+    return f"{secs // 60}:{secs % 60:02d}"
 
 
 # ---------- input panel ----------
@@ -135,8 +187,53 @@ with left:
                 st.error(f"Live call failed: {type(e).__name__}: {e}")
     if fake:
         st.session_state.result = {**FAKE, "live": False, "fixture": choice}
+    if live or fake:
+        if st.session_state.get("result"):
+            st.session_state.result["run_id"] = time.time()
+
+    # Logistics only. Off by default; with it off the board is unchanged.
+    tracking_on = st.toggle("Ambulance tracking (simulated)", value=False, key="tracking")
 
 result = st.session_state.get("result")
+GRAPH = load_graph() if tracking_on else None
+if tracking_on and result:
+    sim = st.session_state.get("sim")
+    if not sim or sim["run_id"] != result.get("run_id"):
+        st.session_state.sim = new_sim(GRAPH, FIXTURES[result["fixture"]].name, result.get("run_id"), time.time())
+sim = st.session_state.get("sim") if tracking_on and result else None
+
+
+def _arrived(sim: dict) -> bool:
+    return sim["halted"] or sim_position(sim, GRAPH, time.time())["arrived"]
+
+
+if sim:
+    with left:
+
+        @st.fragment(run_every=None if _arrived(sim) else "1s")
+        def crew_alert():
+            current = st.session_state.sim
+            if current["pending"]:
+                st.warning(f"**Crew alert:** {current['alert']}")
+                accept_col, keep_col = st.columns(2)
+                if accept_col.button("Accept", type="primary", width="stretch", key="crew_accept"):
+                    st.session_state.sim = sim_answer(current, GRAPH, True, time.time())
+                    st.rerun()
+                if keep_col.button("Keep route", width="stretch", key="crew_keep"):
+                    st.session_state.sim = sim_answer(current, GRAPH, False, time.time())
+                    st.rerun()
+
+        crew_alert()
+
+        st.caption("Presenter")
+        busy = bool(sim["pending"]) or _arrived(sim)
+        block_col, slow_col = st.columns(2)
+        if block_col.button("Inject roadblock (closed)", width="stretch", disabled=busy):
+            st.session_state.sim = sim_inject(sim, GRAPH, "closed", time.time())
+            st.rerun()
+        if slow_col.button("Inject heavy traffic (slow)", width="stretch", disabled=busy):
+            st.session_state.sim = sim_inject(sim, GRAPH, "slow", time.time())
+            st.rerun()
 
 # ---------- board ----------
 with right:
@@ -162,9 +259,40 @@ with right:
         st.markdown(f'<ul class="checklist">{items}</ul>', unsafe_allow_html=True)
 
     eta = fields.get("eta_min")
-    lead = f"{eta} min" if eta is not None else "unknown (no ETA heard)"
-    st.markdown(f'<div class="leadtime">Prep lead time: {lead}</div>', unsafe_allow_html=True)
+    if sim:
+        route_eta = None if sim["halted"] else total_min(sim["route"])
+        lead = f"{route_eta:g} min (simulated route)" if route_eta is not None else "unknown (no open route)"
+        st.markdown(f'<div class="leadtime">Prep lead time: {lead}</div>', unsafe_allow_html=True)
+        spoken = f"{eta} min" if eta is not None else "not heard"
+        quote = fields.get("evidence", {}).get("eta_min")
+        st.markdown(f"Spoken ETA: **{spoken}**" + (f" — “{quote}”" if quote else ""))
+        if route_eta is not None and eta is not None and abs(route_eta - eta) > ETA_GAP_MIN:
+            st.markdown(f"**Route ETA {route_eta:g} min · spoken ETA {eta} min** (differ by more than {ETA_GAP_MIN} min)")
+    else:
+        lead = f"{eta} min" if eta is not None else "unknown (no ETA heard)"
+        st.markdown(f'<div class="leadtime">Prep lead time: {lead}</div>', unsafe_allow_html=True)
     st.caption("The checklist exists before the patient arrives, so prep starts one ETA earlier. " + LITERATURE)
+
+    if sim:
+
+        @st.fragment(run_every=None if _arrived(sim) else "1s")
+        def tracking_board():
+            current = st.session_state.sim
+            pos = sim_position(current, GRAPH, time.time())
+            st.markdown(f'<span class="simlabel">{SIM_LABEL}</span>', unsafe_allow_html=True)
+            if current["halted"]:
+                countdown = "Arrival unknown"
+            elif pos["arrived"]:
+                countdown = "Arrived (simulated)"
+            else:
+                countdown = f"Arrives in {fmt_mmss(pos['eta_route_min'])}"
+            st.markdown(f'<div class="countdown">{countdown}</div>', unsafe_allow_html=True)
+            if current["status"]:
+                st.markdown(f"**{current['status']}**")
+            st.pydeck_chart(tracking_map(current, GRAPH, pos), height=380)
+            st.caption("Illustrative road graph, not a real road network. Map tiles © CARTO, © OpenStreetMap contributors.")
+
+        tracking_board()
 
     if result["stamps"]:
         st.markdown(f"**Cloud requests sent at** · voice: {result.get('source', 'Saved file').lower()}")

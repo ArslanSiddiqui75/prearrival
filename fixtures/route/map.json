@@ -1,0 +1,231 @@
+{
+  "illustrative": true,
+  "note": "Hand-built, illustrative road graph for the simulated tracking demo. Not a real road network: positions are approximate sector locations in Islamabad, segment names are indicative, and travel times are invented to match the fixtures' spoken ETAs. Change the destination or pickups here.",
+  "destination": "pims",
+  "pickups": {
+    "a": "i8",
+    "b": "g11"
+  },
+  "nodes": [
+    {
+      "id": "pims",
+      "name": "PIMS Hospital (G-8), destination placeholder",
+      "lat": 33.705,
+      "lon": 73.052
+    },
+    {
+      "id": "g8",
+      "name": "G-8 Markaz",
+      "lat": 33.6935,
+      "lon": 73.0475
+    },
+    {
+      "id": "zp",
+      "name": "Zero Point",
+      "lat": 33.6925,
+      "lon": 73.0645
+    },
+    {
+      "id": "g7",
+      "name": "G-7 Markaz",
+      "lat": 33.701,
+      "lon": 73.073
+    },
+    {
+      "id": "blue",
+      "name": "Blue Area",
+      "lat": 33.7135,
+      "lon": 73.074
+    },
+    {
+      "id": "f8",
+      "name": "F-8 Markaz",
+      "lat": 33.709,
+      "lon": 73.038
+    },
+    {
+      "id": "f10",
+      "name": "F-10 Markaz",
+      "lat": 33.695,
+      "lon": 73.013
+    },
+    {
+      "id": "n9k",
+      "name": "9th Avenue x Kashmir Highway",
+      "lat": 33.683,
+      "lon": 73.046
+    },
+    {
+      "id": "g9",
+      "name": "G-9 Markaz",
+      "lat": 33.688,
+      "lon": 73.031
+    },
+    {
+      "id": "g10",
+      "name": "G-10 Markaz",
+      "lat": 33.677,
+      "lon": 73.015
+    },
+    {
+      "id": "g11",
+      "name": "G-11 Markaz (pickup B)",
+      "lat": 33.668,
+      "lon": 73.0
+    },
+    {
+      "id": "i8",
+      "name": "I-8 Markaz (pickup A)",
+      "lat": 33.668,
+      "lon": 73.076
+    },
+    {
+      "id": "faiz",
+      "name": "Faizabad Interchange",
+      "lat": 33.665,
+      "lon": 73.084
+    }
+  ],
+  "segments": [
+    {
+      "id": "s01",
+      "from": "i8",
+      "to": "zp",
+      "name": "Kashmir Highway (east)",
+      "minutes": 3
+    },
+    {
+      "id": "s02",
+      "from": "zp",
+      "to": "pims",
+      "name": "Ibn-e-Sina Road",
+      "minutes": 8
+    },
+    {
+      "id": "s03",
+      "from": "i8",
+      "to": "n9k",
+      "name": "I-8 link road",
+      "minutes": 6
+    },
+    {
+      "id": "s04",
+      "from": "n9k",
+      "to": "g8",
+      "name": "9th Avenue",
+      "minutes": 3
+    },
+    {
+      "id": "s05",
+      "from": "g8",
+      "to": "pims",
+      "name": "G-8 inner road",
+      "minutes": 2
+    },
+    {
+      "id": "s06",
+      "from": "i8",
+      "to": "faiz",
+      "name": "Faizabad link",
+      "minutes": 2
+    },
+    {
+      "id": "s07",
+      "from": "faiz",
+      "to": "g7",
+      "name": "7th Avenue",
+      "minutes": 6
+    },
+    {
+      "id": "s08",
+      "from": "g7",
+      "to": "zp",
+      "name": "7th Avenue (south)",
+      "minutes": 3
+    },
+    {
+      "id": "s09",
+      "from": "g7",
+      "to": "blue",
+      "name": "Jinnah Avenue (east)",
+      "minutes": 3
+    },
+    {
+      "id": "s10",
+      "from": "blue",
+      "to": "pims",
+      "name": "Jinnah Avenue (west)",
+      "minutes": 5
+    },
+    {
+      "id": "s11",
+      "from": "zp",
+      "to": "g8",
+      "name": "Kashmir Highway (G-8 stretch)",
+      "minutes": 3
+    },
+    {
+      "id": "s12",
+      "from": "g11",
+      "to": "g10",
+      "name": "Kashmir Highway (west)",
+      "minutes": 2
+    },
+    {
+      "id": "s13",
+      "from": "g10",
+      "to": "n9k",
+      "name": "Kashmir Highway (centre)",
+      "minutes": 5
+    },
+    {
+      "id": "s14",
+      "from": "g10",
+      "to": "g9",
+      "name": "G-10 to G-9 road",
+      "minutes": 3
+    },
+    {
+      "id": "s15",
+      "from": "g9",
+      "to": "g8",
+      "name": "G-9 service road",
+      "minutes": 8
+    },
+    {
+      "id": "s16",
+      "from": "g11",
+      "to": "f10",
+      "name": "G-11 to F-10 link",
+      "minutes": 4
+    },
+    {
+      "id": "s17",
+      "from": "f10",
+      "to": "f8",
+      "name": "F-10 to F-8 road",
+      "minutes": 6
+    },
+    {
+      "id": "s18",
+      "from": "f8",
+      "to": "pims",
+      "name": "Ibn-e-Sina Road (north)",
+      "minutes": 4
+    },
+    {
+      "id": "s19",
+      "from": "g9",
+      "to": "f8",
+      "name": "G-9 to F-8 road",
+      "minutes": 6
+    },
+    {
+      "id": "s20",
+      "from": "g8",
+      "to": "f8",
+      "name": "9th Avenue (north)",
+      "minutes": 3
+    }
+  ]
+}
