@@ -125,7 +125,9 @@ Say this on stage: "This prepares the room. It does not diagnose, and it does no
 
 ## 13. Out of scope
 
-Urdu on stage, GPS, a multi-patient board, free-form LLM orders, a mobile app, Scale 2 NEWS2, and any claim of measured minutes saved in a real ER.
+Urdu on stage, real GPS, live traffic feeds, a multi-patient board, free-form LLM orders, a mobile app, Scale 2 NEWS2, and any claim of measured minutes saved in a real ER.
+
+Simulated ambulance tracking is in scope with the limits in section 18 (spec edit agreed Sat 10 Oct). Real GPS, live traffic and the mobile app stay out.
 
 ## 14. Demo constraints
 
@@ -145,3 +147,33 @@ Sunday 11 October 2026, 12:02–12:07, SEECS Lecture Hall. Presenting laptop on 
 Hour-by-hour plan: [TIMELINE.md](TIMELINE.md).
 
 Saturday 13:00 — board renders with fake fields. Saturday 18:00 — both fixtures return live JSON. Saturday 21:00 — feature freeze. Saturday 23:00 — submission pack. Sunday 10:30 — two rehearsals on the presenting laptop. Be at SEECS if the submission link is handed out on site.
+
+## 17. Confidence flags
+
+Spec edit agreed Saturday 10 October 2026.
+
+Each extracted value gets a visible flag when there is a checkable reason to doubt it. The board lists what the ER should confirm with the crew: flagged fields first, then missing NEWS2 parameters, or "Nothing to confirm".
+
+No model is asked to rate its own confidence. Flags come only from these signals (constants in `src/confidence.py`):
+
+- **unclear speech**: the evidence quote for a note field falls in a Whisper segment with `avg_logprob` below `LOW_LOGPROB = -0.5`. Quote and segment are matched by case-insensitive substring. Transcription uses `response_format="verbose_json"`.
+- **quote not found**: the evidence quote is not in the transcript word for word.
+- **implausible**: monitor values outside HR 20–250, SBP 50–260, DBP 20–160, SpO2 50–100, or SBP not greater than DBP (both flagged).
+- **partly visible / unclear on photo**: the vision read describes each value's digits in the image as clear, partial or unclear.
+
+A flagged value is still scored. Flags never change a value, NEWS2, the priority or the prepare-for list.
+
+## 18. Simulated ambulance tracking
+
+Spec edit agreed Saturday 10 October 2026.
+
+Behind an "Ambulance tracking (simulated)" toggle, off by default. With it off, the board behaves exactly as before.
+
+- The map, route and position are simulated on a hand-built, illustrative Islamabad road graph (`fixtures/route/map.json`). It is not a real road network. PIMS (G-8) is a destination placeholder. Pickups are placed so the initial route ETA matches each fixture's spoken ETA.
+- Routing is our own Dijkstra on that graph. No AI and no outside routing service.
+- Simulated clock: 1 real second = 10 simulated seconds.
+- The presenter can inject a closure or heavy traffic (travel time ×3) on the next segment ahead. A closure always offers the fastest open route, or "No open route, contact dispatch" with arrival unknown. Heavy traffic offers an alternate only if it saves at least 2 minutes.
+- The crew decides. The route changes only after the crew taps Accept. While the alert is unanswered, the board keeps the current route and shows "Alternate offered, waiting for crew".
+- While tracking is on, prep lead time uses the route ETA. The spoken ETA is always shown as evidence, and both are shown if they differ by more than 3 minutes.
+- The board always shows "SIMULATED POSITION · SIMULATED ROADBLOCK" while tracking is on. Nothing simulated may look live.
+- Tracking is logistics only. It never changes NEWS2, the priority or the prepare-for list, and its timed refresh never re-sends the cloud calls.

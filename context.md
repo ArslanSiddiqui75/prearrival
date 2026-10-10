@@ -78,6 +78,7 @@ See [progress.md](progress.md) for the task checklist. Headline as of the last u
 
 Newest first. One or two lines per session: what changed, what's next.
 
+- 2026-10-10 13:30 PKT — On branch feature/confidence-and-tracking: added confidence flags (SRS §17) and simulated ambulance tracking with roadblock rerouting (SRS §18), both as agreed spec edits. pytest 36 passed; preflight a b READY; fixtures unchanged with tracking off and on. See progress.md for what is left.
 - 2026-10-10 12:15 PKT — Published the product brief for ideation (workflow, rules, verified status, expand/cut options): https://claude.ai/artifact/Me4uXZcZDLiDjw9TpJv4wS
 - 2026-10-10 12:00 PKT — Added scripts/preflight.py (READY on this laptop). Opened a PR from machine/adan to main.
 - 2026-10-10 11:50 PKT — Merged main (TIMELINE.md) into machine/adan. Added the opt-in live mic to the board; the file path stays the default. Team must be told that all tracks are built on this branch.

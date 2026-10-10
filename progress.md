@@ -66,3 +66,23 @@ Task checklist against the clock in [docs/SRS.md](docs/SRS.md) §16. Tick items 
 - Still to test: a run on the phone hotspot, and two timed rehearsals.
 - 11:30 Live mic added (opt-in "Voice note: Live mic" on the board, `st.audio_input`). Tested with an unscripted chest-pain utterance: ETA 10, chest_pain, alert, RR 24, on oxygen extracted correctly. Whisper gets a vocabulary-only prompt. Needs one real-voice test on the presenting laptop.
 - 12:00 Added `scripts/preflight.py`. READY on this laptop: both fixtures pass note, photo, and priority checks. Each run is about 4 s unthrottled; back-to-back runs can take about 30 s because the SDK silently retries free-tier 429s. The spinner now says so.
+
+## Branch feature/confidence-and-tracking (from machine/adan, 2026-10-10 afternoon)
+
+### Built
+- Confidence flags (`src/confidence.py`, SRS §17): Whisper `verbose_json` segments, unverified quotes, implausible monitor values, and photo legibility. The board gets a "Check" column (amber) and a "Confirm with crew" line.
+- Simulated tracking (`src/route.py`, `src/tracking.py`, `fixtures/route/map.json`, SRS §18): toggle (default off), pydeck map, "Arrives in m:ss" countdown, presenter roadblock and heavy-traffic buttons, crew alert with Accept / Keep route.
+- `scripts/preflight.py` gains an offline tracking check (`--offline` skips the network).
+
+### Verified on this laptop (home network)
+- `pytest`: 36 passed.
+- `preflight.py a b`: READY. Fields, photo reads, NEWS2 (A 4, B 0), priority and prepare-for are unchanged. No flags fire on either fixture.
+- Through the board, live, tracking off vs on: identical fields, NEWS2, priority and checklist for A and B. Roadblock then Accept: A lead time 8 → 11 min, B 12 → 15 min. No new cloud call (timestamps unchanged). P1/P3 unchanged.
+- Vision reply with legibility is about 218 tokens, under the 300 cap (finish_reason stop), so the cap was not raised.
+
+### Still to do
+- Team to confirm pickup points (I-8 for A, G-11 for B) and the destination hospital (PIMS placeholder) in `fixtures/route/map.json`.
+- Look at the map in a real browser: tiles, colours, and smooth 1 s refresh. Only headless tests have run so far.
+- Run `python scripts/preflight.py a b` on the hotspot.
+- Rehearse the roadblock beat. At 10x, Fixture A's whole trip lasts 48 real seconds and its first leg 18 s. Inject the roadblock within about 15 s of the result landing, or there is nothing ahead to block.
+- Merge this branch into machine/adan (PR #5) or open its own PR.
