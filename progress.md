@@ -84,5 +84,5 @@ Task checklist against the clock in [docs/SRS.md](docs/SRS.md) §16. Tick items 
 - Team to confirm pickup points (I-8 for A, G-11 for B) and the destination hospital (PIMS placeholder) in `fixtures/route/map.json`.
 - Look at the map in a real browser: tiles, colours, and smooth 1 s refresh. Only headless tests have run so far.
 - Run `python scripts/preflight.py a b` on the hotspot.
-- Rehearse the roadblock beat. At 10x, Fixture A's whole trip lasts 48 real seconds and its first leg 18 s. Inject the roadblock within about 15 s of the result landing, or there is nothing ahead to block.
+- Rehearse the roadblock beat. At 10x, Fixture A's whole trip lasts 48 real seconds. Inject within 18 s of the result landing to get the scripted beat (Kashmir Highway closed, adds 3 min, ETA 8 -> 11). From 18 to 36 s it blocks the last road instead (adds 5 min). After 36 s there is nothing ahead to block. If that is too tight on stage, the team can lower SIM_SPEED in src/tracking.py (a spec change).
 - Merge this branch into machine/adan (PR #5) or open its own PR.
