@@ -29,7 +29,9 @@ copy .env.example .env
 
 Put `GROQ_API_KEY` in `.env`. That file is gitignored. Models are set in `src/groq_client.py` and can be overridden in `.env`.
 
-The stubs raise `NotImplementedError`. `pytest` stays red until the score owner implements `src/news.py` and `src/decide.py`.
+Run the board with `streamlit run app.py` and open http://localhost:8501.
+
+Before a demo, run `python scripts/preflight.py a b`. It checks the key and models, runs both fixtures live, and prints READY or the failing line. Don't run it in the two minutes before the slot, because the free-tier rate limit can slow the next call.
 
 ## Clock
 

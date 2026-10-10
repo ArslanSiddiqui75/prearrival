@@ -120,7 +120,7 @@ with left:
     fake = st.button("Fake fields (layout check)", width="stretch")
 
     if live:
-        with st.spinner("Calling the cloud…"):
+        with st.spinner("Calling the cloud… (over ~15 s means the free-tier rate limit is pausing it; it retries on its own)"):
             try:
                 st.session_state.result = {**run_live(folder, audio), "live": True, "fixture": choice, "source": source}
             except Exception as e:  # show the failure; never fall back to a fixture

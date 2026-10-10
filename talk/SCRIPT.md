@@ -31,7 +31,8 @@ On the board, switch "Voice note" to **Live mic**, press the record button, spea
 
 - Free-tier Groq limit: the vision model allows about 3 Send-live clicks per minute. Don't click repeatedly in the 2 minutes before the slot.
 - Board open at `http://localhost:8501` (`streamlit run app.py`), Fixture A selected, browser zoomed so P1 is readable from the back.
-- Hotspot on, hall Wi-Fi off, one test run of A at least 2 minutes before 12:02.
+- Hotspot on, hall Wi-Fi off. At 10:00 run `python scripts/preflight.py a b` and expect READY. Last test click at least 2 minutes before 12:02.
+- If Send live spins longer than about 15 s, it is the free-tier rate limit retrying. Keep talking through the pipeline slide; it finishes on its own.
 
 ## Likely questions
 
