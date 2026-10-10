@@ -3,6 +3,9 @@ import Button from "./Button.jsx";
 import CrewAlert from "./CrewAlert.jsx";
 import { fmtMmss } from "../format.js";
 
+// Layout-check button only with ?dev=1 in the URL. Never on stage.
+const DEV = new URLSearchParams(window.location.search).get("dev") === "1";
+
 function Segmented({ label, options, value, onChange, disabled }) {
   return (
     <div className="field">
@@ -166,9 +169,11 @@ export default function InputRail({
       <Button variant="primary" className="btn-send" disabled={!canSend} onClick={onSendLive}>
         Send live
       </Button>
-      <button type="button" className="textbtn textbtn-small" disabled={running || !fixture} onClick={onFake}>
-        Fake fields (layout check)
-      </button>
+      {DEV && (
+        <button type="button" className="textbtn textbtn-small" disabled={running || !fixture} onClick={onFake}>
+          Fake fields (layout check)
+        </button>
+      )}
 
       <div className="toggle-row">
         <button
@@ -204,7 +209,7 @@ export default function InputRail({
 
       {fixture && (
         <figure className="photo">
-          <img key={fixture.id} src={fixture.photo} alt="Monitor photo (stand-in, not this patient)" />
+          <img key={fixture.id} src={fixture.photo} alt="Monitor photo (sample device, read live by the vision model)" />
           <figcaption>{fixture.photo_caption}</figcaption>
         </figure>
       )}

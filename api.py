@@ -149,7 +149,7 @@ def build_board(result: dict, fixture: str, source: str, live: bool) -> dict:
 def fixture_info(fixture: str) -> dict:
     folder = FIXTURES[fixture]
     photo = next(iter(sorted(folder.glob("monitor.*"))), folder / "monitor.jpg")
-    caption = "Monitor photo (stand-in, not this patient)"
+    caption = "Monitor photo (sample device, read live by the vision model)"
     meta = folder / "photo.json"
     if meta.exists():
         src = json.loads(meta.read_text()).get("source", {})

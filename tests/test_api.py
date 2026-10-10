@@ -108,7 +108,7 @@ def test_fixtures_lists_a_and_b_with_media_that_is_served():
     for item in items:
         assert item["audio"] == f"/fixtures/{item['id']}/audio.wav"
         assert item["photo"] == f"/fixtures/{item['id']}/monitor.jpg"
-        assert "stand-in" in item["photo_caption"]
+        assert "sample device" in item["photo_caption"]
         assert client.get(item["audio"]).status_code == 200
         assert client.get(item["photo"]).status_code == 200
     assert items[0]["photo_caption"].endswith(
