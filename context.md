@@ -78,6 +78,7 @@ See [progress.md](progress.md) for the task checklist. Headline as of the last u
 
 Newest first. One or two lines per session: what changed, what's next.
 
+- 2026-10-10 21:00 PKT — Branch feature/react-board (from machine/adan, not merged): optional React + Framer Motion board on a FastAPI wrapper (api.py, web/dist committed). Streamlit stays the default; go/no-go rule in docs/REACT_BOARD.md.
 - 2026-10-10 20:45 PKT — Fixed map blanking and scroll-zoom found in real-browser testing; recorded the backup video (~/Desktop/Hackython/PreArrival-backup-run.mp4); README hero image. pytest 36, preflight READY. Code is frozen for the 21:00 freeze; only Fixture A blockers after this.
 - 2026-10-10 20:35 PKT — Polished the board for the projector after real-browser screenshots (map fixed and framed, countdown beside lead time, crew alert above the fold). Rewrote talk around the roadblock beat; added talk/QA.md and local sourced facts (PIMS 8,000+/day per Senate reply; Rescue 1122 2.5M emergencies in Punjab 2025). Deck sources saved in talk/deck/.
 - 2026-10-10 13:30 PKT — On branch feature/confidence-and-tracking: added confidence flags (SRS §17) and simulated ambulance tracking with roadblock rerouting (SRS §18), both as agreed spec edits. pytest 36 passed; preflight a b READY; fixtures unchanged with tracking off and on. See progress.md for what is left.

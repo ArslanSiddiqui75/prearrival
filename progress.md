@@ -101,3 +101,7 @@ Task checklist against the clock in [docs/SRS.md](docs/SRS.md) §16. Tick items 
 - Three timed rehearsals of the new script, especially the roadblock click within 15 s of the result.
 - Share the deck and download its PDF. Submit before midnight.
 - Optional: upgrade Groq to Dev Tier to remove the rate-limit stall.
+
+## Branch feature/react-board (optional, 2026-10-10 evening)
+
+- [ ] api.py + tests/test_api.py, web/ React board, web/dist committed, verified headless. Used on stage only per the go/no-go rule in docs/REACT_BOARD.md.
