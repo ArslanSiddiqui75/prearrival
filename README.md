@@ -7,6 +7,7 @@ Read these three before writing code:
 - [docs/SRS.md](docs/SRS.md) — signed product spec. If this README and the spec disagree, the spec wins.
 - [docs/PROJECT.md](docs/PROJECT.md) — requirements drill, acceptance bar, and the dropped CodeBlue idea.
 - [docs/AICON.md](docs/AICON.md) — allocation email, module rules, schedule, and what was not on the public site.
+- [docs/TIMELINE.md](docs/TIMELINE.md) — Saturday 10:30 through the Sunday 12:02 slot, with an owner on each block.
 
 ## Owners
 
@@ -31,6 +32,8 @@ Put `OPENAI_API_KEY` in `.env`. That file is gitignored.
 The stubs raise `NotImplementedError`. `pytest` stays red until the score owner implements `src/news.py` and `src/decide.py`.
 
 ## Clock
+
+The working schedule is [docs/TIMELINE.md](docs/TIMELINE.md).
 
 Saturday 13:00 board with fake fields. Saturday 18:00 both fixtures live. Saturday 21:00 feature freeze. Saturday 23:00 submission pack. Sunday 10:30 two rehearsals on the presenting laptop and the phone hotspot.
 

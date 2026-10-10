@@ -142,4 +142,6 @@ Sunday 11 October 2026, 12:02–12:07, SEECS Lecture Hall. Presenting laptop on 
 
 ## 16. Clock
 
+Hour-by-hour plan: [TIMELINE.md](TIMELINE.md).
+
 Saturday 13:00 — board renders with fake fields. Saturday 18:00 — both fixtures return live JSON. Saturday 21:00 — feature freeze. Saturday 23:00 — submission pack. Sunday 10:30 — two rehearsals on the presenting laptop. Be at SEECS if the submission link is handed out on site.
