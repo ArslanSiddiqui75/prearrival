@@ -19,6 +19,9 @@ Return only a JSON object:
 {"consciousness": ..., "mechanism": ..., "eta_min": ..., "on_oxygen": ..., "rr": ..., "temp_c": ...,
  "evidence": {"<field>": "<exact quote>"}}"""
 
+# Appended to an evidence quote that is not found word for word in the note. src/confidence.py reads it.
+NOT_FOUND_MARK = " [not found verbatim in note]"
+
 FIELDS = ("consciousness", "mechanism", "eta_min", "on_oxygen", "rr", "temp_c")
 
 
@@ -65,7 +68,7 @@ def extract_note(text: str) -> dict:
         if quote and quote.lower().strip(" .\"'") in text.lower():
             evidence[field] = quote
         else:
-            evidence[field] = f"{quote or '(no quote)'} [not found verbatim in note]"
+            evidence[field] = f"{quote or '(no quote)'}{NOT_FOUND_MARK}"
     out["evidence"] = evidence
     out["requested_at"] = requested_at
     return out

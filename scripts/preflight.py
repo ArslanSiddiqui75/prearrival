@@ -14,10 +14,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
+from src.confidence import compute_flags, confirm_with_crew  # noqa: E402
 from src.decide import decide  # noqa: E402
 from src.groq_client import STT_MODEL, TEXT_MODEL, VISION_MODEL, client  # noqa: E402
 from src.news import score_news  # noqa: E402
 
+NOTE_KEYS = ("consciousness", "mechanism", "eta_min", "on_oxygen", "rr", "temp_c")
 failed = False
 
 
@@ -42,8 +44,14 @@ def run_fixture(fx):
     note = extract_note(heard["text"])
     secs = time.time() - t
 
-    fields = {k: v for k, v in {**note, **photo}.items() if k not in ("evidence", "requested_at")}
-    plan = decide(fields, score_news(fields))
+    fields = {k: note[k] for k in NOTE_KEYS} | {k: photo[k] for k in ("hr", "sbp", "dbp", "spo2")}
+    score = score_news(fields)
+    plan = decide(fields, score)
+    flags = compute_flags(note, photo, heard["segments"])
+    # Flags must never change the score or the plan.
+    fields["flags"] = flags
+    check(f"fixture {fx}: flags leave score and plan unchanged", score_news(fields) == score and decide(fields, score_news(fields)) == plan)
+    print(f"      flags: {flags or 'none'} · confirm with crew: {', '.join(confirm_with_crew(flags, score['missing'])) or 'nothing'}")
 
     note_diff = {k: (note[k], v) for k, v in expected["from_note"].items() if note[k] != v}
     photo_diff = {k: (photo[k], photo_truth[k]) for k in ("hr", "sbp", "dbp", "spo2") if photo[k] != photo_truth[k]}
@@ -52,7 +60,7 @@ def run_fixture(fx):
     check(
         f"fixture {fx}: {plan['priority']} {', '.join(plan['prepare_for'])}",
         plan["priority"] == expected["expect_priority"] and plan["prepare_for"] == expected["expect_prepare_for"],
-        f"{secs:.1f}s",
+        f"NEWS2 {score['points']} {score['breakdown']} · {secs:.1f}s",
     )
 
 
