@@ -60,3 +60,5 @@ Task checklist against the clock in [docs/SRS.md](docs/SRS.md) §16. Tick items 
 - `audio.wav` plan: generate it from `note.txt` with TTS (Groq Orpheus or an offline engine). No public dataset has our scripts.
 - With the human-read photo numbers, the rules give A = P1 (resus bay, CT, senior review) and B = P3 (cubicle, limb x-ray), matching `expected.json`.
 - Fixture B risk: the photo also shows an arterial line at 100/59. The vision prompt says to prefer the cuff NBP. Watch this on the first live run.
+- 11:00 live check: vision returns exactly the human-read values on both photos (3 of 3 runs each). Extraction from note text matches expected.json for A and B. Text model switched to `openai/gpt-oss-120b` because llama-3.3-70b is not available to this key.
+- TTS is blocked: `canopylabs/orpheus-v1-english` needs terms accepted by the Groq org admin at https://console.groq.com/playground?model=canopylabs%2Forpheus-v1-english

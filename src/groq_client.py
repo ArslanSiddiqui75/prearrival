@@ -7,16 +7,17 @@ from functools import lru_cache
 
 from dotenv import load_dotenv
 
+load_dotenv()
+
 STT_MODEL = os.getenv("PREARRIVAL_STT_MODEL", "whisper-large-v3")
 VISION_MODEL = os.getenv("PREARRIVAL_VISION_MODEL", "qwen/qwen3.8-27b")
-TEXT_MODEL = os.getenv("PREARRIVAL_TEXT_MODEL", "llama-3.3-70b-versatile")
+TEXT_MODEL = os.getenv("PREARRIVAL_TEXT_MODEL", "openai/gpt-oss-120b")
 
 
 @lru_cache(maxsize=1)
 def client():
     from groq import Groq
 
-    load_dotenv()
     key = os.getenv("GROQ_API_KEY")
     if not key:
         raise RuntimeError("GROQ_API_KEY is not set. Put it in .env.")
