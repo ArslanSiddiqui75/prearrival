@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-STT_MODEL = os.getenv("PREARRIVAL_STT_MODEL", "whisper-large-v3")
+STT_MODEL = os.getenv("PREARRIVAL_STT_MODEL", "whisper-large-v3-turbo")
 VISION_MODEL = os.getenv("PREARRIVAL_VISION_MODEL", "qwen/qwen3.8-27b")
 TEXT_MODEL = os.getenv("PREARRIVAL_TEXT_MODEL", "openai/gpt-oss-120b")
 

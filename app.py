@@ -1,6 +1,7 @@
 """PreArrival ER board. Imports decide and score_news. Does not reimplement thresholds."""
 
 import json
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import streamlit as st
@@ -62,8 +63,11 @@ def run_live(folder: Path) -> dict:
     from src.transcribe import transcribe
     from src.vision import read_monitor
 
-    heard = transcribe(str(folder / "audio.wav"))
-    photo = read_monitor(str(next(folder.glob("monitor.*"))))
+    # Speech and photo are independent; send both at once to cut stage wait.
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        heard_job = pool.submit(transcribe, str(folder / "audio.wav"))
+        photo_job = pool.submit(read_monitor, str(next(folder.glob("monitor.*"))))
+        heard, photo = heard_job.result(), photo_job.result()
     note = extract_note(heard["text"])
     fields = {k: v for k, v in {**note, **photo}.items() if k not in ("evidence", "requested_at")}
     fields["evidence"] = {**note["evidence"], **photo["evidence"]}

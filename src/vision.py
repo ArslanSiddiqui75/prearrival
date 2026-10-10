@@ -35,6 +35,8 @@ def read_monitor(image_path: str) -> dict:
     reply = client().chat.completions.create(
         model=VISION_MODEL,
         temperature=0,
+        # Free tier allows 1000 output tokens/min on this model; the JSON reply is ~180.
+        max_completion_tokens=300,
         messages=[
             {
                 "role": "user",

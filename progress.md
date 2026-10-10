@@ -5,7 +5,7 @@ Task checklist against the clock in [docs/SRS.md](docs/SRS.md) §16. Tick items 
 ## Clock (Saturday 10 → Sunday 11 Oct 2026, PKT)
 
 - [x] Sat 13:00 — board renders with fake fields (done 10:59)
-- [ ] Sat 18:00 — both fixtures return live JSON
+- [x] Sat 18:00 — both fixtures return live JSON (done 11:13)
 - [ ] Sat 21:00 — feature freeze
 - [ ] Sat 23:00 — submission pack
 - [ ] Sun 10:30 — two rehearsals on presenting laptop + hotspot
@@ -22,9 +22,9 @@ Task checklist against the clock in [docs/SRS.md](docs/SRS.md) §16. Tick items 
 - [x] `transcribe` → cloud STT, returns text + requested_at
 - [x] `read_monitor` → cloud vision, nulls for unreadable values, evidence, requested_at
 - [x] `extract_note` → cloud model, schema fields + evidence quotes, nulls when absent
-- [ ] Fixture A: `audio.wav` (todo, TTS) · [x] `monitor.jpg` Tempus Pro, HR 105 · [x] `photo.json`
-- [ ] Fixture B: `audio.wav` (todo, TTS) · [x] `monitor.jpg` IntelliVue, NBP 129/57 · [x] `photo.json`
-- [ ] Both fixtures return live JSON matching `expected.json`
+- [x] Fixture A: `audio.wav` (Groq Orpheus TTS, voice troy) · [x] `monitor.jpg` Tempus Pro, HR 105 · [x] `photo.json`
+- [x] Fixture B: `audio.wav` (Groq Orpheus TTS, voice troy) · [x] `monitor.jpg` IntelliVue, NBP 129/57 · [x] `photo.json`
+- [x] Both fixtures return live JSON matching `expected.json`
 
 ## Board (`app.py`)
 
@@ -45,13 +45,13 @@ Task checklist against the clock in [docs/SRS.md](docs/SRS.md) §16. Tick items 
 
 ## Acceptance (PROJECT.md) — all must be true Sun 11:30
 
-- [ ] Fixture A from disk, live call, timestamp, evidence, NEWS2 arithmetic, P1, resus bay / CT / senior review
-- [ ] Prep lead time shows 8 min for A
-- [ ] Fixture B one click away: P3, cubicle, limb x-ray
-- [ ] `pytest` green
+- [x] Fixture A from disk, live call, timestamp, evidence, NEWS2 arithmetic, P1, resus bay / CT / senior review (verified on this laptop, home network)
+- [x] Prep lead time shows 8 min for A
+- [x] Fixture B one click away: P3, cubicle, limb x-ray
+- [x] `pytest` green
 - [ ] Safety line in talk
 - [ ] Works on hotspot with hall Wi-Fi off
-- [ ] API key only in `.env`
+- [x] API key only in `.env` (gitignored, checked)
 
 ## Notes
 
@@ -61,4 +61,7 @@ Task checklist against the clock in [docs/SRS.md](docs/SRS.md) §16. Tick items 
 - With the human-read photo numbers, the rules give A = P1 (resus bay, CT, senior review) and B = P3 (cubicle, limb x-ray), matching `expected.json`.
 - Fixture B risk: the photo also shows an arterial line at 100/59. The vision prompt says to prefer the cuff NBP. Watch this on the first live run.
 - 11:00 live check: vision returns exactly the human-read values on both photos (3 of 3 runs each). Extraction from note text matches expected.json for A and B. Text model switched to `openai/gpt-oss-120b` because llama-3.3-70b is not available to this key.
-- TTS is blocked: `canopylabs/orpheus-v1-english` needs terms accepted by the Groq org admin at https://console.groq.com/playground?model=canopylabs%2Forpheus-v1-english
+- 11:13 full live run through the board: A = P1 (resus bay, CT, senior review), 8 min, NEWS2 4. B = P3 (cubicle, limb x-ray), 12 min, NEWS2 0. Transcripts are correct.
+- Latency is about 9 s per run. STT and vision now run in parallel; STT switched to whisper-large-v3-turbo.
+- **Free-tier rate limit:** the vision model allows 1000 output tokens/min. Each photo read is about 180 tokens (capped at 300), so stay under about 3 Send-live clicks per minute. Before the demo, don't spam-click during rehearsal right before the slot. A Groq Dev Tier upgrade removes this risk.
+- Still to test: a run on the phone hotspot, and two timed rehearsals.
