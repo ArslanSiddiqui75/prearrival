@@ -167,6 +167,8 @@ def tracking_map(sim: dict, graph: dict, pos: dict):
         initial_view_state=pdk.ViewState(latitude=(max(lats) + min(lats)) / 2, longitude=(max(lons) + min(lons)) / 2,
                                          zoom=zoom),
         map_style="light",
+        # No scroll-wheel zoom: scrolling the page over the map on stage must scroll the page. +/- buttons still zoom.
+        views=[pdk.View(type="MapView", controller={"scrollZoom": False, "dragPan": True, "doubleClickZoom": True})],
         tooltip={"text": "{label}"},
     )
 
