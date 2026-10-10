@@ -99,8 +99,8 @@ with left:
     else:
         st.warning(f"Missing {folder.relative_to(ROOT)}/monitor.jpg")
 
-    live = st.button("Send live", type="primary", use_container_width=True, disabled=not (audio.exists() and photos))
-    fake = st.button("Fake fields (layout check)", use_container_width=True)
+    live = st.button("Send live", type="primary", width="stretch", disabled=not (audio.exists() and photos))
+    fake = st.button("Fake fields (layout check)", width="stretch")
 
     if live:
         with st.spinner("Calling the cloud…"):
@@ -156,7 +156,7 @@ with right:
             {"Field": LABELS[k], "Value": "—" if fields.get(k) is None else str(fields[k]), "Evidence": evidence.get(k, "")}
             for k in ["mechanism", "consciousness", "eta_min", "hr", "sbp", "dbp", "spo2", "rr", "temp_c", "on_oxygen"]
         ]
-        st.dataframe(rows, hide_index=True, use_container_width=True)
+        st.dataframe(rows, hide_index=True, width="stretch")
         with st.expander("Transcript"):
             st.write(result["transcript"])
     with n_col:
