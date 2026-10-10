@@ -5,10 +5,15 @@ An alternative front end for the same pipeline. It is **not** the default: `stre
 ## Run
 
 ```bash
+cd ~/Desktop/Hackython/prearrival            # the repo root
+git checkout feature/react-board
+python3 -m venv .venv && . .venv/bin/activate   # skip the venv step if .venv already exists
 pip install -r requirements.txt
 python -m uvicorn api:app --port 8000
 # open http://localhost:8000
 ```
+
+On a fresh laptop without `python3-venv`, use `python3 -m uvicorn` after `python3 -m pip install -r requirements.txt`.
 
 The built UI is committed in `web/dist`, so the presenting laptop does not need Node. The same `.env` with `GROQ_API_KEY` is used.
 
