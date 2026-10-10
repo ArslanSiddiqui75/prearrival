@@ -339,7 +339,7 @@ with right:
             current = st.session_state.sim
             pos = sim_position(current, GRAPH, time.time())
             st.markdown(f'<span class="simlabel">{SIM_LABEL}</span>', unsafe_allow_html=True)
-            st.pydeck_chart(tracking_map(current, GRAPH, pos), height=MAP_HEIGHT)
+            st.pydeck_chart(tracking_map(current, GRAPH, pos), height=MAP_HEIGHT, key="tracking_map")  # stable key: update in place, no blank remount
             st.caption("Blue: current route · orange: alternate offered · red: simulated incident. "
                        "Illustrative road graph, not a real road network. Map tiles © CARTO, © OpenStreetMap contributors.")
 
