@@ -1,0 +1,33 @@
+<section id="pipeline" data-transition="fade" style="background:#F6F5F1;color:#0F1B2D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:700;line-height:1.1">AI reads. Rules decide.</h2>
+<div style="display:flex;align-items:center;gap:20px">
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#ECEAE3;padding:36px;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#5A6676;letter-spacing:2px;text-transform:uppercase">Input</p>
+<p style="font-size:30px;line-height:1.35;color:#2C3A4D">Voice note</p>
+<p style="font-size:30px;line-height:1.35;color:#2C3A4D">Monitor photo</p>
+</div>
+<x-shape kind="arrow-right" style="background:#9AA6B4;width:56px;height:28px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#DCE7F3;padding:36px;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#245C99;letter-spacing:2px;text-transform:uppercase">AI extracts</p>
+<p style="font-size:30px;line-height:1.35;color:#14304F">Speech to text</p>
+<p style="font-size:30px;line-height:1.35;color:#14304F">Vision reads HR, BP, SpO2</p>
+<p style="font-size:30px;line-height:1.35;color:#14304F">Fields + evidence quotes</p>
+</div>
+<x-shape kind="arrow-right" style="background:#9AA6B4;width:56px;height:28px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#FBE3DA;padding:36px;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#A8361C;letter-spacing:2px;text-transform:uppercase">Rules score</p>
+<p style="font-size:30px;line-height:1.35;color:#4A1A0E">Partial NEWS2</p>
+<p style="font-size:30px;line-height:1.35;color:#4A1A0E">Missing stays missing</p>
+<p style="font-size:30px;line-height:1.35;color:#4A1A0E">Doubts flagged</p>
+</div>
+<x-shape kind="arrow-right" style="background:#9AA6B4;width:56px;height:28px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#0F1B2D;padding:36px;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#F08A6E;letter-spacing:2px;text-transform:uppercase">Fixed table</p>
+<p style="font-size:30px;line-height:1.35;color:#F6F5F1">Priority P1–P3</p>
+<p style="font-size:30px;line-height:1.35;color:#F6F5F1">Prepare-for list</p>
+</div>
+</div>
+<p style="font-size:32px;line-height:1.4;color:#2C3A4D;width:1560px">The model never picks the priority and never writes orders. Every number traces to a quote or the photo, and the board says what to confirm with the crew.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#5A6676">Groq cloud: Whisper large-v3 turbo · Qwen vision · GPT-OSS 120B · NEWS2 Scale 1 (Royal College of Physicians)</p>
+<aside>0:30–1:00. Keep this short. Two cloud calls run in parallel: speech to text on the voice note, and a vision model reading the monitor. A language model pulls the remaining fields, each with a quote. Then plain code scores a partial NEWS2 and looks up a fixed table. The AI never invents a CT or a cross-match. Before switching to the board: make sure "Ambulance tracking (simulated)" is ON and Fixture A is selected.</aside>
+</section>
