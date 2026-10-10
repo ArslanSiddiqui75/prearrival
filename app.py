@@ -1,6 +1,7 @@
 """PreArrival ER board. Imports decide and score_news. Does not reimplement thresholds."""
 
 import json
+import tempfile
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -10,6 +11,7 @@ from src.decide import decide
 from src.news import PARAMS, score_news
 
 ROOT = Path(__file__).parent
+MIC_PATH = Path(tempfile.gettempdir()) / "prearrival_mic.wav"
 FIXTURES = {"A — head injury": ROOT / "fixtures/a", "B — ankle": ROOT / "fixtures/b"}
 SAFETY = "This prepares the room. It does not diagnose, and it does not replace the nurse's triage."
 # Verified 2026-10-10: 2018 AHA/ASA early stroke guideline (the 2019 update dropped the fixed number).
@@ -59,14 +61,14 @@ st.markdown(
 )
 
 
-def run_live(folder: Path) -> dict:
+def run_live(folder: Path, audio_path: Path) -> dict:
     from src.extract_note import extract_note
     from src.transcribe import transcribe
     from src.vision import read_monitor
 
     # Speech and photo are independent; send both at once to cut stage wait.
     with ThreadPoolExecutor(max_workers=2) as pool:
-        heard_job = pool.submit(transcribe, str(folder / "audio.wav"))
+        heard_job = pool.submit(transcribe, str(audio_path))
         photo_job = pool.submit(read_monitor, str(next(folder.glob("monitor.*"))))
         heard, photo = heard_job.result(), photo_job.result()
     note = extract_note(heard["text"])
@@ -88,12 +90,22 @@ with left:
     st.subheader("Paramedic input")
     choice = st.radio("Fixture", list(FIXTURES), horizontal=True)
     folder = FIXTURES[choice]
-    audio = folder / "audio.wav"
+    # Saved file is the stage promise. Live mic is opt-in, only after the file path has worked twice.
+    source = st.radio("Voice note", ["Saved file", "Live mic"], horizontal=True)
     photos = list(folder.glob("monitor.*"))
-    if audio.exists():
-        st.audio(str(audio))
+    if source == "Saved file":
+        audio = folder / "audio.wav"
+        if audio.exists():
+            st.audio(str(audio))
+        else:
+            st.warning(f"Missing {audio.relative_to(ROOT)}")
     else:
-        st.warning(f"Missing {audio.relative_to(ROOT)}")
+        recording = st.audio_input("Speak the handoff in English (ETA, what happened, alert or confused, oxygen)")
+        audio = MIC_PATH
+        if recording is not None:
+            MIC_PATH.write_bytes(recording.getvalue())
+        elif MIC_PATH.exists():
+            MIC_PATH.unlink()
     if photos:
         caption = "Monitor photo (stand-in, not this patient)"
         meta = folder / "photo.json"
@@ -110,7 +122,7 @@ with left:
     if live:
         with st.spinner("Calling the cloud…"):
             try:
-                st.session_state.result = {**run_live(folder), "live": True, "fixture": choice}
+                st.session_state.result = {**run_live(folder, audio), "live": True, "fixture": choice, "source": source}
             except Exception as e:  # show the failure; never fall back to a fixture
                 st.session_state.result = None
                 st.error(f"Live call failed: {type(e).__name__}: {e}")
@@ -148,7 +160,7 @@ with right:
     st.caption("The checklist exists before the patient arrives, so prep starts one ETA earlier. " + LITERATURE)
 
     if result["stamps"]:
-        st.markdown("**Cloud requests sent at**")
+        st.markdown(f"**Cloud requests sent at** · voice: {result.get('source', 'Saved file').lower()}")
         for name, ts in result["stamps"].items():
             st.markdown(f'<span class="stamp">{name}: {ts}</span>', unsafe_allow_html=True)
 

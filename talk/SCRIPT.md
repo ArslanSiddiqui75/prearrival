@@ -18,6 +18,15 @@ Safety line, say it out loud: "This prepares the room. It does not diagnose, and
 
 Live mic only if the file path has already succeeded twice on this laptop.
 
+## Live mic (optional)
+
+On the board, switch "Voice note" to **Live mic**, press the record button, speak, stop, then Send live. The monitor photo still comes from the selected fixture. The board labels the run "voice: live mic".
+
+- Say it like a radio handoff: ETA, what happened, alert or confused, on oxygen or not. Example: "Crew two, about ten out. Sixty-year-old woman, crushing chest pain, alert, resp rate twenty-four, on four litres of oxygen."
+- The browser asks for mic permission the first time. Allow it during setup, not on stage.
+- Works only from `http://localhost` on the presenting laptop. Browsers block the mic on a plain-http network address.
+- English only. If one attempt in rehearsal is shaky, drop it from the talk.
+
 ## Before the slot
 
 - Free-tier Groq limit: the vision model allows about 3 Send-live clicks per minute. Don't click repeatedly in the 2 minutes before the slot.

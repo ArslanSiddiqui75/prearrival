@@ -2,6 +2,9 @@
 
 from datetime import datetime
 
+# Vocabulary hint only (spelling of handoff terms), not content. Helps live mic speech.
+VOCAB = "Paramedic handoff. ETA, resp rate, respiratory rate, SpO2, sats, BP, systolic, GCS, oxygen, litres, alert, confused."
+
 
 def transcribe(audio_path: str) -> dict:
     """Send the wav to the cloud and return the transcript.
@@ -18,6 +21,7 @@ def transcribe(audio_path: str) -> dict:
         file=(audio_path.rsplit("/", 1)[-1], audio),
         model=STT_MODEL,
         language="en",
+        prompt=VOCAB,
         temperature=0,
     )
     return {"text": result.text.strip(), "requested_at": requested_at}
