@@ -4,7 +4,7 @@ Task checklist against the clock in [docs/SRS.md](docs/SRS.md) §16. Tick items 
 
 ## Clock (Saturday 10 → Sunday 11 Oct 2026, PKT)
 
-- [ ] Sat 13:00 — board renders with fake fields
+- [x] Sat 13:00 — board renders with fake fields (done 10:59)
 - [ ] Sat 18:00 — both fixtures return live JSON
 - [ ] Sat 21:00 — feature freeze
 - [ ] Sat 23:00 — submission pack
@@ -15,7 +15,7 @@ Task checklist against the clock in [docs/SRS.md](docs/SRS.md) §16. Tick items 
 
 - [x] `score_news` per SRS §6 (partial, Scale 1, oxygen +2, breakdown, missing, any_red)
 - [x] `decide` per SRS §7–8 (first-match priority, first-match prepare-for row, reasons)
-- [x] `pytest` green (12 tests; verified by calling the test functions directly, real pytest run pending)
+- [x] `pytest` green (12 passed)
 
 ## Speech and vision (`src/transcribe.py`, `src/vision.py`, `src/extract_note.py`, `fixtures/`)
 
