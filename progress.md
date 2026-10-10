@@ -86,3 +86,18 @@ Task checklist against the clock in [docs/SRS.md](docs/SRS.md) §16. Tick items 
 - Run `python scripts/preflight.py a b` on the hotspot.
 - Rehearse the roadblock beat. At 10x, Fixture A's whole trip lasts 48 real seconds. Inject within 18 s of the result landing to get the scripted beat (Kashmir Highway closed, adds 3 min, ETA 8 -> 11). From 18 to 36 s it blocks the last road instead (adds 5 min). After 36 s there is nothing ahead to block. If that is too tight on stage, the team can lower SIM_SPEED in src/tracking.py (a spec change).
 - Merge this branch into machine/adan (PR #5) or open its own PR.
+
+## Saturday evening polish (machine/adan, 20:45)
+
+- Real-browser check (headless Chromium, 1920/1536/1366 wide). Fixed: pydeck path widths, map framing, a map that blanked on every 1 s refresh (now a stable key), and scroll-wheel zoom hijacking page scroll. The crew alert and Accept now sit above the fold; the countdown sits beside the lead time.
+- Streamlit usage-stats calls turned off (`.streamlit/config.toml`).
+- Talk rewritten around the roadblock beat (`talk/SCRIPT.md`), judge answers in `talk/QA.md`, deck updated with sourced local facts, and deck sources in `talk/deck/`.
+- Backup video of a live Fixture A run with roadblock and Accept: `~/Desktop/Hackython/PreArrival-backup-run.mp4` (68 s, outside the repo). README hero image: `docs/board.png`.
+- Final checks 20:42: pytest 36 passed; `preflight.py a b` READY (about 4 s per fixture).
+
+### Still for the team
+- Merge PR #5 into main (Arslan).
+- Hotspot run with Wi-Fi off on the presenting laptop, then `preflight.py a b`.
+- Three timed rehearsals of the new script, especially the roadblock click within 15 s of the result.
+- Share the deck and download its PDF. Submit before midnight.
+- Optional: upgrade Groq to Dev Tier to remove the rate-limit stall.

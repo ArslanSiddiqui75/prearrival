@@ -2,6 +2,12 @@
 
 Ambulance-to-ER handoff board for VisionForge at AICON'26. A saved English voice note and a monitor photo go to a cloud model live. A partial NEWS2 and a fixed table set the priority and the prepare-for list.
 
+![PreArrival board: live Fixture A, P1 with resus bay, CT and senior review; a simulated road closure rerouted the ambulance, ETA 8 to 11 minutes, triage unchanged](docs/board.png)
+
+**AI reads, rules decide.** Cloud models (Groq: Whisper, Qwen vision, GPT-OSS) turn the voice note and the monitor photo into fields, each with an evidence quote. Plain code scores a partial NEWS2 (missing vitals stay missing) and looks up a fixed prepare-for table. The board flags values to confirm with the crew, and an optional simulated ambulance tracker shows the route and ETA, with roadblock rerouting that the crew must accept. Neither ever changes the triage.
+
+Quick start: `pip install -r requirements.txt`, put `GROQ_API_KEY` in `.env`, run `python scripts/preflight.py a b` (expect READY), then `streamlit run app.py`.
+
 Read these three before writing code:
 
 - [docs/SRS.md](docs/SRS.md) — signed product spec. If this README and the spec disagree, the spec wins.
