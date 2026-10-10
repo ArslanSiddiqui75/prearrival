@@ -2,7 +2,11 @@
 
 Ambulance-to-ER handoff board for VisionForge at AICON'26. A saved English voice note and a monitor photo go to a cloud model live. A partial NEWS2 and a fixed table set the priority and the prepare-for list.
 
-The signed spec is [docs/SRS.md](docs/SRS.md). If this README and the spec disagree, the spec wins.
+Read these three before writing code:
+
+- [docs/SRS.md](docs/SRS.md) — signed product spec. If this README and the spec disagree, the spec wins.
+- [docs/PROJECT.md](docs/PROJECT.md) — requirements drill, acceptance bar, and the dropped CodeBlue idea.
+- [docs/AICON.md](docs/AICON.md) — allocation email, module rules, schedule, and what was not on the public site.
 
 ## Owners
 

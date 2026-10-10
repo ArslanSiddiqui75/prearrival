@@ -6,6 +6,8 @@ Repo: private, `ArslanSiddiqui75/prearrival`.
 
 This file is the signed spec. If code and this file disagree, this file wins until the team edits it on purpose.
 
+Event packet: [AICON.md](AICON.md). Why these rules were locked: [PROJECT.md](PROJECT.md).
+
 ## 1. Problem
 
 The ER learns about a patient when the stretcher arrives. Beds, blood, CT, and specialists are arranged after the clock has started.
