@@ -78,6 +78,7 @@ See [progress.md](progress.md) for the task checklist. Headline as of the last u
 
 Newest first. One or two lines per session: what changed, what's next.
 
+- 2026-10-10 12:15 PKT — Published the product brief for ideation (workflow, rules, verified status, expand/cut options): https://claude.ai/artifact/Me4uXZcZDLiDjw9TpJv4wS
 - 2026-10-10 12:00 PKT — Added scripts/preflight.py (READY on this laptop). Opened a PR from machine/adan to main.
 - 2026-10-10 11:50 PKT — Merged main (TIMELINE.md) into machine/adan. Added the opt-in live mic to the board; the file path stays the default. Team must be told that all tracks are built on this branch.
 - 2026-10-10 11:40 PKT — Six-slide deck published as a claude.ai Slides artifact (https://claude.ai/artifact/X3xYC58YmNxFv9gk1rRRY1). talk/SCRIPT.md rewritten to match. Literature figure corrected to the 2018 AHA/ASA guideline (the 2019 update dropped the 20-minute number). Remaining: hotspot test, rehearsals, merge to main.
