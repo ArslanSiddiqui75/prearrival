@@ -93,7 +93,10 @@ function Ambulance({ x, y }) {
 function Pin({ xy, title, sub, kind }) {
   const [x, y] = xy;
   const right = x > W - 150;
-  const tx = right ? x - 13 : x + 13;
+  // The ambulance (dot + pulse ring, up to r=22) starts on the pickup, so its label sits further out and above.
+  const off = kind === "pickup" ? 26 : 13;
+  const lift = kind === "pickup" ? 14 : 0;
+  const tx = right ? x - off : x + off;
   const anchor = right ? "end" : "start";
   return (
     <g className={`map-pin map-pin-${kind}`}>
@@ -102,11 +105,11 @@ function Pin({ xy, title, sub, kind }) {
       ) : (
         <circle cx={x} cy={y} r={7} className="pin-pickup" />
       )}
-      <text x={tx} y={sub ? y - 3 : y + 5} textAnchor={anchor} className="map-label map-label-strong">
+      <text x={tx} y={(sub ? y - 3 : y + 5) - lift} textAnchor={anchor} className="map-label map-label-strong">
         {title}
       </text>
       {sub && (
-        <text x={tx} y={y + 13} textAnchor={anchor} className="map-label map-label-sub">
+        <text x={tx} y={y + 13 - lift} textAnchor={anchor} className="map-label map-label-sub">
           {sub}
         </text>
       )}

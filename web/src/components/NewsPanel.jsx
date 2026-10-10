@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from "react";
 import { animate, motion, useReducedMotion } from "motion/react";
-import { fmtValue } from "../format.js";
+import { fmtField } from "../format.js";
 
 const START = 0.45; // after the hero has landed
 
@@ -18,14 +18,15 @@ function CountUp({ value }) {
   return <span className="tabnum">{n}</span>;
 }
 
-// 4 cells for 0..3; cells up to and including the term's points are filled, coloured by points.
+// 3 blocks; exactly `points` of them are filled (0 = none, 3 = all), coloured by points.
 function TermBar({ points, index }) {
+  const p = Math.min(Math.max(points, 0), 3);
   return (
-    <span className={`bar bar-p${Math.min(Math.max(points, 0), 3)}`} aria-label={`${points} of 3`}>
-      {[0, 1, 2, 3].map((c) => (
+    <span className={`bar bar-p${p}`} aria-label={`${p} of 3`}>
+      {[0, 1, 2].map((c) => (
         <motion.span
           key={c}
-          className={c <= points ? "cell cell-on" : "cell"}
+          className={c < p ? "cell cell-on" : "cell"}
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 0.18, delay: START + index * 0.05 + c * 0.04, ease: "easeOut" }}
@@ -44,7 +45,7 @@ function NewsPanel({ terms, points, missing, confirm }) {
         {terms.map((t, i) => (
           <li key={t.key}>
             <span className="term-text">
-              {t.label} <span className="mono">{fmtValue(t.value)}</span> → <span className="mono">{t.points}</span>
+              {t.label} <span className="mono">{fmtField(t.key, t.value)}</span> → <span className="mono">{t.points}</span>
             </span>
             <TermBar points={t.points} index={i} />
           </li>

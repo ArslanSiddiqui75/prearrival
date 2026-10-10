@@ -140,6 +140,7 @@ button { font: inherit; color: inherit; }
 .rail {
   position: sticky; top: var(--topbar-h);
   align-self: start;
+  min-height: calc(100vh - var(--topbar-h));
   max-height: calc(100vh - var(--topbar-h));
   overflow-y: auto;
   display: flex; flex-direction: column; gap: 12px;
@@ -318,7 +319,13 @@ button { font: inherit; color: inherit; }
   font-family: var(--display); font-weight: 800;
   font-size: clamp(6rem, 12vw, 10rem); line-height: 1; letter-spacing: 0.01em;
 }
-.why { margin: 8px 0 0; font-size: 0.9rem; color: var(--ink-2); line-height: 1.35; }
+.why { margin: 10px 0 0; color: var(--ink); line-height: 1.35; }
+.why-label {
+  display: block; font-family: var(--display); font-weight: 700; font-size: 0.85rem;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px;
+}
+.why-list { list-style: none; margin: 0; padding: 0; }
+.why-list li { font-size: 1.15rem; font-weight: 600; padding: 2px 0; }
 
 .prep .section-label { margin-bottom: 4px; }
 .checklist { list-style: none; margin: 0; padding: 0; }
@@ -416,13 +423,46 @@ button { font: inherit; color: inherit; }
   text-transform: uppercase; font-size: 0.9rem; color: var(--accent);
 }
 .transcript p { font-size: 0.88rem; margin: 8px 0 0; white-space: pre-wrap; }
+.seg { transition: color 200ms ease; }
+.seg-on { color: var(--ink); }
+.quote-mark { background: var(--accent-soft); color: var(--accent-strong); padding: 0 2px; border-radius: 2px; }
+.row-on td { background: var(--accent-soft); }
+
+/* ---------- hear the evidence ---------- */
+.hear {
+  position: relative; display: inline-block; overflow: hidden; vertical-align: middle;
+  margin-left: 8px; padding: 1px 8px; border-radius: var(--radius);
+  border: 1px solid var(--accent); color: var(--accent); background: transparent;
+  font: inherit; font-style: normal; font-size: 0.78rem; font-weight: 600; white-space: nowrap; cursor: pointer;
+}
+.hear:hover { background: var(--accent-soft); }
+.hear:disabled { opacity: 0.5; cursor: not-allowed; }
+.hear-on { color: var(--accent-ink); background: var(--accent); }
+.hear-bar { position: absolute; left: 0; top: 0; bottom: 0; background: var(--accent-strong); transition: width 120ms linear; }
+.hear-text { position: relative; }
+.quote-btn {
+  padding: 0; border: 0; background: none; font: inherit; color: inherit; text-align: left; cursor: zoom-in;
+  text-decoration: underline dotted; text-underline-offset: 3px;
+}
+.quote-btn:hover { color: var(--accent); }
+.lightbox {
+  position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center;
+  padding: 24px; background: rgba(0, 0, 0, 0.72); cursor: zoom-out;
+}
+.lightbox-figure {
+  margin: 0; max-width: min(1100px, 100%); max-height: 100%; display: flex; flex-direction: column; gap: 10px;
+  padding: 14px; background: var(--surface); border-radius: var(--radius); cursor: default;
+}
+.lightbox-figure img { display: block; max-width: 100%; max-height: calc(100vh - 160px); height: auto; border: 1px solid var(--rule); }
+.lightbox-figure figcaption { font-size: 1.05rem; line-height: 1.4; }
+.lightbox-credit { color: var(--muted); font-size: 0.8rem; }
 
 .terms { list-style: none; margin: 0 0 10px; padding: 0; }
 .terms li {
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
   padding: 6px 0; border-bottom: 1px solid var(--rule); font-size: 1.05rem;
 }
-.bar { display: inline-grid; grid-template-columns: repeat(4, 16px); gap: 3px; flex: none; }
+.bar { display: inline-grid; grid-template-columns: repeat(3, 18px); gap: 3px; flex: none; }
 .cell { display: block; height: 12px; background: var(--cell-off); transform-origin: left center; }
 .bar-p0 .cell-on { background: var(--cell-0); }
 .bar-p1 .cell-on { background: var(--cell-1); }
@@ -456,7 +496,7 @@ button { font: inherit; color: inherit; }
 }
 @media (max-width: 860px) {
   .layout { grid-template-columns: minmax(0, 1fr); }
-  .rail { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--rule); }
+  .rail { position: static; min-height: 0; max-height: none; border-right: 0; border-bottom: 1px solid var(--rule); }
   .main { padding: 14px 16px 32px; }
   .topbar { padding: 0 16px; }
   .topbar-status { display: none; }

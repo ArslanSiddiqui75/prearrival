@@ -1,7 +1,7 @@
 import { memo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { reveal } from "../motion.js";
-import { fmtMmss, fmtNum } from "../format.js";
+import { fmtMmss, fmtNum, reasonLines } from "../format.js";
 
 const PriorityTile = memo(function PriorityTile({ priority, reasons }) {
   const key = String(priority || "").toLowerCase();
@@ -21,7 +21,14 @@ const PriorityTile = memo(function PriorityTile({ priority, reasons }) {
           </motion.span>
         </AnimatePresence>
       </div>
-      <p className="why">Why: {reasons.join("; ")}</p>
+      <div className="why">
+        <span className="why-label">Why</span>
+        <ul className="why-list">
+          {reasonLines(reasons).map((line, i) => (
+            <li key={`${i}-${line}`}>{line}</li>
+          ))}
+        </ul>
+      </div>
     </motion.div>
   );
 });

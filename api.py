@@ -16,7 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from src.confidence import compute_flags, confirm_with_crew
+from src.confidence import _segment_for, compute_flags, confirm_with_crew
 from src.decide import decide
 from src.news import PARAMS, score_news
 from src.route import load_graph, segment
@@ -87,7 +87,17 @@ def run_live(folder: Path, audio_path: Path) -> dict:
         "monitor photo": photo["requested_at"],
         "note extraction": note["requested_at"],
     }
-    return {"fields": fields, "transcript": heard["text"], "stamps": stamps}
+    return {"fields": fields, "transcript": heard["text"], "stamps": stamps, "segments": heard["segments"]}
+
+
+def audio_span(key: str, evidence: str, segments: list) -> dict | None:
+    """{start, end} of the Whisper segment holding a voice-note row's quote; None for monitor rows or no match."""
+    if key not in NOTE_KEYS or not evidence:
+        return None
+    seg = _segment_for(evidence, segments)
+    if seg is None or seg.get("start") is None or seg.get("end") is None:
+        return None
+    return {"start": seg["start"], "end": seg["end"]}
 
 
 def json_safe(x):
@@ -112,6 +122,7 @@ def build_board(result: dict, fixture: str, source: str, live: bool) -> dict:
     fields.setdefault("flags", {})
     score = score_news(fields)
     plan = decide(fields, score)
+    segments = result.get("segments") or []
     board = {
         "run_id": time.time(),
         "live": live,
@@ -119,6 +130,7 @@ def build_board(result: dict, fixture: str, source: str, live: bool) -> dict:
         "source": source,
         "fields": fields,
         "transcript": result["transcript"],
+        "transcript_segments": [{"text": s.get("text", ""), "start": s.get("start"), "end": s.get("end")} for s in segments],
         "stamps": result["stamps"],
         "score": score,
         "plan": plan,
@@ -136,6 +148,7 @@ def build_board(result: dict, fixture: str, source: str, live: bool) -> dict:
                 "value": fields.get(k),
                 "evidence": fields["evidence"].get(k, ""),
                 "flags": fields["flags"].get(k, []),
+                "audio_span": audio_span(k, fields["evidence"].get(k, ""), segments),
             }
             for k in ROW_KEYS
         ],

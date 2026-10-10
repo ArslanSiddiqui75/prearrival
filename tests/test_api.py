@@ -33,8 +33,15 @@ def _post(path, **body):
     return r.json()
 
 
+SEGMENTS = [
+    {"text": "A man fell off a bike and hit his head.", "start": 0.0, "end": 3.2, "avg_logprob": -0.1},
+    {"text": "He is confused, not answering properly.", "start": 3.2, "end": 6.0, "avg_logprob": -0.1},
+    {"text": "He is not on oxygen. ETA eight minutes.", "start": 6.0, "end": 9.5, "avg_logprob": -0.1},
+]
+
+
 def _heard():
-    return {"text": NOTE_A, "requested_at": STAMPS["speech-to-text"], "segments": [{"text": NOTE_A, "avg_logprob": -0.1}]}
+    return {"text": NOTE_A, "requested_at": STAMPS["speech-to-text"], "segments": SEGMENTS}
 
 
 def _photo(legibility=None):
@@ -122,6 +129,7 @@ def test_fake_board_is_not_live_and_leaves_FAKE_alone():
     assert board["live"] is False and board["source"] == "file" and board["fixture"] == "a"
     assert board["plan"]["priority"] == "P1"
     assert board["transcript"].startswith("FAKE")
+    assert board["transcript_segments"] == [] and all(row["audio_span"] is None for row in board["rows"])
     assert board["stamps"] == {}
     assert board["fields"]["flags"] == {}
     assert "flags" not in api.FAKE["fields"]
@@ -140,8 +148,9 @@ def test_run_file_builds_the_board_from_score_news_and_decide(cloud):
     assert r.status_code == 200
     board = r.json()
 
-    assert set(board) == {"run_id", "live", "fixture", "source", "fields", "transcript", "stamps", "score", "plan",
-                          "news_terms", "missing", "confirm", "rows", "safety", "literature", "eta_gap_min"}
+    assert set(board) == {"run_id", "live", "fixture", "source", "fields", "transcript", "transcript_segments", "stamps",
+                          "score", "plan", "news_terms", "missing", "confirm", "rows", "safety", "literature",
+                          "eta_gap_min"}
     assert board["live"] is True and board["fixture"] == "a" and board["source"] == "file"
     assert isinstance(board["run_id"], float)
 
@@ -173,8 +182,17 @@ def test_run_file_builds_the_board_from_score_news_and_decide(cloud):
                                                      "spo2", "rr", "temp_c", "on_oxygen"]
     rows = {row["key"]: row for row in board["rows"]}
     assert rows["mechanism"] == {"key": "mechanism", "label": "Mechanism", "value": "head_injury",
-                                 "evidence": "fell off a bike and hit his head", "flags": []}
-    assert rows["rr"] == {"key": "rr", "label": "Resp rate", "value": None, "evidence": "", "flags": []}
+                                 "evidence": "fell off a bike and hit his head", "flags": [],
+                                 "audio_span": {"start": 0.0, "end": 3.2}}
+    assert rows["rr"] == {"key": "rr", "label": "Resp rate", "value": None, "evidence": "", "flags": [],
+                          "audio_span": None}
+
+    # Hear the evidence: Whisper segments travel with the board; voice-note rows point at their segment,
+    # monitor-photo rows have no span.
+    assert board["transcript_segments"] == [{"text": s["text"], "start": s["start"], "end": s["end"]} for s in SEGMENTS]
+    assert rows["consciousness"]["audio_span"] == {"start": 3.2, "end": 6.0}
+    assert rows["eta_min"]["audio_span"] == {"start": 6.0, "end": 9.5}
+    assert rows["hr"]["audio_span"] is None and rows["spo2"]["audio_span"] is None
     assert rows["on_oxygen"]["value"] is False and rows["eta_min"]["value"] == 8
 
     assert board["safety"] == "This prepares the room. It does not diagnose, and it does not replace the nurse's triage."

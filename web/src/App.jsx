@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MotionConfig, motion } from "motion/react";
 import * as api from "./api.js";
 import { reveal } from "./motion.js";
@@ -47,7 +47,7 @@ function useTheme() {
   return [theme, toggle];
 }
 
-const ResultView = memo(function ResultView({ result, sim, theme, pollNote }) {
+const ResultView = memo(function ResultView({ result, sim, theme, pollNote, audioUrl, fixture }) {
   return (
     <motion.div className="result" variants={reveal.container} initial="hidden" animate="show">
       {result.live ? (
@@ -58,7 +58,14 @@ const ResultView = memo(function ResultView({ result, sim, theme, pollNote }) {
       <Hero result={result} sim={sim} />
       {sim && <TrackingMap sim={sim} theme={theme} pollNote={pollNote} />}
       <motion.div className="lower" layout="position" variants={reveal.fade(0.36)}>
-        <EvidenceTable rows={result.rows} transcript={result.transcript} />
+        <EvidenceTable
+          rows={result.rows}
+          transcript={result.transcript}
+          segments={result.transcript_segments || []}
+          audioUrl={audioUrl}
+          photoUrl={fixture ? fixture.photo : null}
+          photoCaption={fixture ? fixture.photo_caption : ""}
+        />
         <NewsPanel terms={result.news_terms} points={result.score.points} missing={result.missing} confirm={result.confirm} />
       </motion.div>
       <motion.footer className="foot" layout="position" variants={reveal.fade(0.42)}>
@@ -243,6 +250,17 @@ export default function App() {
   }, [tracking, simActive, applySim]);
 
   const liveSim = tracking && result && simRunId === result.run_id && sim && sim.active ? sim : null;
+
+  // Voice note behind the result: the fixture's wav for saved-file runs, the recorded blob for live-mic runs.
+  const resultFixtureInfo = result ? fixtures.find((f) => f.id === result.fixture) || null : null;
+  const resultBlob = result && result.live && result.source === "mic" && mic ? mic.blob : null;
+  const blobUrl = useMemo(() => (resultBlob ? URL.createObjectURL(resultBlob) : null), [resultBlob]);
+  useEffect(() => () => blobUrl && URL.revokeObjectURL(blobUrl), [blobUrl]);
+  let audioUrl = null;
+  if (result && result.live) {
+    if (result.source === "mic") audioUrl = blobUrl;
+    else if (resultFixtureInfo) audioUrl = resultFixtureInfo.audio;
+  }
   const fixtureKnown = fixtures.some((f) => f.id === fixtureId);
   const canSend = !running && fixtureKnown && (source === "file" || !!mic);
 
@@ -279,7 +297,15 @@ export default function App() {
               </div>
             )}
             {result ? (
-              <ResultView key={result.run_id} result={result} sim={liveSim} theme={theme} pollNote={pollNote} />
+              <ResultView
+                key={result.run_id}
+                result={result}
+                sim={liveSim}
+                theme={theme}
+                pollNote={pollNote}
+                audioUrl={audioUrl}
+                fixture={resultFixtureInfo}
+              />
             ) : (
               <Pipeline running={running} startedAt={runStartedAt} />
             )}
