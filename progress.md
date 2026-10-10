@@ -13,28 +13,28 @@ Task checklist against the clock in [docs/SRS.md](docs/SRS.md) §16. Tick items 
 
 ## Score and table (`src/news.py`, `src/decide.py`, `tests/`)
 
-- [ ] `score_news` per SRS §6 (partial, Scale 1, oxygen +2, breakdown, missing, any_red)
-- [ ] `decide` per SRS §7–8 (first-match priority, first-match prepare-for row, reasons)
-- [ ] `pytest` green
+- [x] `score_news` per SRS §6 (partial, Scale 1, oxygen +2, breakdown, missing, any_red)
+- [x] `decide` per SRS §7–8 (first-match priority, first-match prepare-for row, reasons)
+- [x] `pytest` green (12 tests; verified by calling the test functions directly, real pytest run pending)
 
 ## Speech and vision (`src/transcribe.py`, `src/vision.py`, `src/extract_note.py`, `fixtures/`)
 
-- [ ] `transcribe` → cloud STT, returns text + requested_at
-- [ ] `read_monitor` → cloud vision, nulls for unreadable values, evidence, requested_at
-- [ ] `extract_note` → cloud model, schema fields + evidence quotes, nulls when absent
+- [x] `transcribe` → cloud STT, returns text + requested_at
+- [x] `read_monitor` → cloud vision, nulls for unreadable values, evidence, requested_at
+- [x] `extract_note` → cloud model, schema fields + evidence quotes, nulls when absent
 - [ ] Fixture A: `audio.wav`, `monitor.jpg` (abnormal HR or SBP), `photo.json`
 - [ ] Fixture B: `audio.wav`, `monitor.jpg` (normal HR, SBP, SpO2), `photo.json`
 - [ ] Both fixtures return live JSON matching `expected.json`
 
 ## Board (`app.py`)
 
-- [ ] Input panel: fixture A / B picker, run button
-- [ ] Shows request timestamps, extracted fields with evidence quotes
-- [ ] NEWS2 arithmetic + missing list
-- [ ] Large priority + large checklist (readable from back of hall)
-- [ ] Prep lead time = spoken ETA; one published door-to-CT/needle figure labeled as literature
-- [ ] Imports `decide`; no thresholds in UI
-- [ ] Clear error on network failure (no fake fallback)
+- [x] Input panel: fixture A / B picker, run button
+- [x] Shows request timestamps, extracted fields with evidence quotes
+- [x] NEWS2 arithmetic + missing list
+- [x] Large priority + large checklist (readable from back of hall)
+- [x] Prep lead time = spoken ETA; one published door-to-CT/needle figure labeled as literature
+- [x] Imports `decide`; no thresholds in UI
+- [x] Clear error on network failure (no fake fallback)
 
 ## Talk (`talk/`)
 
@@ -52,3 +52,9 @@ Task checklist against the clock in [docs/SRS.md](docs/SRS.md) §16. Tick items 
 - [ ] Safety line in talk
 - [ ] Works on hotspot with hall Wi-Fi off
 - [ ] API key only in `.env`
+
+## Notes
+
+- Speech, vision and extraction code is written against Groq but **not yet run live**. It needs `GROQ_API_KEY`.
+- The literature figure in `app.py` (`LITERATURE`) needs checking by the talk owner before the demo.
+- `audio.wav` plan: generate it from `note.txt` with TTS (Groq Orpheus or an offline engine). No public dataset has our scripts.

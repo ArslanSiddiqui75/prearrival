@@ -26,7 +26,7 @@ pip install -r requirements.txt
 copy .env.example .env
 ```
 
-Put `OPENAI_API_KEY` in `.env`. That file is gitignored.
+Put `GROQ_API_KEY` in `.env`. That file is gitignored. Models are set in `src/groq_client.py` and can be overridden in `.env`.
 
 The stubs raise `NotImplementedError`. `pytest` stays red until the score owner implements `src/news.py` and `src/decide.py`.
 
