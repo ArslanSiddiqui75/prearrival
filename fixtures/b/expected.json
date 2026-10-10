@@ -1,0 +1,13 @@
+{
+  "from_note": {
+    "consciousness": "alert",
+    "mechanism": "limb_injury",
+    "eta_min": 12,
+    "on_oxygen": false,
+    "rr": null,
+    "temp_c": null
+  },
+  "photo": "Add monitor.jpg with a normal heart rate, systolic BP, and SpO2. Write the numbers you can read into photo.json. Do not invent them here.",
+  "expect_priority": "P3",
+  "expect_prepare_for": ["cubicle", "limb x-ray"]
+}

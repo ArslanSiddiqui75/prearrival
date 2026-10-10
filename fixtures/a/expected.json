@@ -1,0 +1,13 @@
+{
+  "from_note": {
+    "consciousness": "not_alert",
+    "mechanism": "head_injury",
+    "eta_min": 8,
+    "on_oxygen": false,
+    "rr": null,
+    "temp_c": null
+  },
+  "photo": "Add monitor.jpg that shows an abnormal heart rate or systolic BP. Write the numbers you can read into photo.json. Do not invent them here.",
+  "expect_priority": "P1",
+  "expect_prepare_for": ["resus bay", "CT", "senior review"]
+}
