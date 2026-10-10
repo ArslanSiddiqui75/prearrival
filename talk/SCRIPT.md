@@ -2,14 +2,31 @@
 
 One speaker. Phone timer. Presenting laptop on the phone hotspot.
 
+Slides (six): https://claude.ai/artifact/X3xYC58YmNxFv9gk1rRRY1 (private until shared from its Share menu). Each slide has speaker notes. Download it as PDF or PPTX before Sunday so the deck works offline.
+
 Safety line, say it out loud: "This prepares the room. It does not diagnose, and it does not replace the nurse's triage."
 
-| Time | What you do |
-|---|---|
-| 0:00–0:40 | The ER learns about the patient when the stretcher arrives. Pulsara and Twiage already take forms. This takes a messy voice note and a monitor photo. |
-| 0:40–1:20 | Pipeline: cloud transcript, cloud photo read, partial NEWS2 on screen, fixed prepare-for table. Point at the request timestamp. |
-| 1:20–4:00 | Run Fixture A. Pause on the evidence quotes, the arithmetic, P1, resus bay, CT. Prep lead time is the spoken ETA, eight minutes. |
-| 4:00–4:40 | Safety line. One published door-to-CT or door-to-needle number, labeled as literature. |
-| 4:40–5:00 | If a judge asks whether every case is a resus, click Fixture B. Ankle, alert, P3, cubicle, x-ray. |
+| Time | Slide | What you do |
+|---|---|---|
+| 0:00–0:20 | 1 Cover | Name, team, one line on what PreArrival does. |
+| 0:20–0:40 | 2 Problem | The ER learns about the patient when the stretcher arrives. Pulsara and Twiage already take forms. This takes a messy voice note and a monitor photo. |
+| 0:40–1:20 | 3 Pipeline | Cloud transcript and cloud photo read run in parallel. A model pulls the fields with quotes. Rules compute partial NEWS2 and look up a fixed table. Point at the request timestamp. |
+| 1:20–4:00 | 4 Demo, then the board | Fixture A, Send live (about 9 s). Pause on the timestamps, the evidence quotes, the arithmetic (HR 105 → 1, not alert → 3, total 4; RR and temp missing), P1, resus bay, CT, senior review. Prep lead time 8 min. |
+| 4:00–4:20 | 5 Impact | 8 min lead time. Published context: 2018 AHA/ASA guideline targets imaging within 20 min of arrival. Say the limit: not a measured saving. |
+| 4:20–4:40 | 6 Safety | Safety line, word for word. |
+| 4:40–5:00 | Board | If a judge asks whether every case is a resus: Fixture B, Send live. Ankle, alert, P3, cubicle, limb x-ray. |
 
 Live mic only if the file path has already succeeded twice on this laptop.
+
+## Before the slot
+
+- Free-tier Groq limit: the vision model allows about 3 Send-live clicks per minute. Don't click repeatedly in the 2 minutes before the slot.
+- Board open at `http://localhost:8501` (`streamlit run app.py`), Fixture A selected, browser zoomed so P1 is readable from the back.
+- Hotspot on, hall Wi-Fi off, one test run of A at least 2 minutes before 12:02.
+
+## Likely questions
+
+- Why not let the model choose the priority? Free-form clinical orders are a hallucination risk. The table is fixed and anyone can read it.
+- What if the photo is unreadable? That vital shows as missing and is not scored. It is never assumed normal.
+- Is the monitor photo the real patient? No. It is a stand-in openly licensed photo, credited on the board, read live by the vision model.
+- Is the voice real? It is a synthetic voice reading the paramedic note. It still goes through live speech-to-text.

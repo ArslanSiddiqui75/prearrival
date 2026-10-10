@@ -12,10 +12,11 @@ from src.news import PARAMS, score_news
 ROOT = Path(__file__).parent
 FIXTURES = {"A — head injury": ROOT / "fixtures/a", "B — ankle": ROOT / "fixtures/b"}
 SAFETY = "This prepares the room. It does not diagnose, and it does not replace the nurse's triage."
-# Talk owner: verify this figure and source before the demo.
+# Verified 2026-10-10: 2018 AHA/ASA early stroke guideline (the 2019 update dropped the fixed number).
 LITERATURE = (
-    "Published context, not our measurement: AHA/ASA guidance targets brain imaging within "
-    "20 minutes of ER arrival for suspected stroke (Powers et al., Stroke 2019)."
+    "Published context, not our measurement: the 2018 AHA/ASA stroke guideline set a target of brain imaging "
+    "within 20 minutes of ER arrival for more than half of treatment candidates "
+    "(Powers et al., Stroke 2018, doi:10.1161/STR.0000000000000158)."
 )
 LABELS = {
     "rr": "Resp rate",

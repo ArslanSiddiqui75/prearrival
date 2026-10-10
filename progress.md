@@ -38,9 +38,9 @@ Task checklist against the clock in [docs/SRS.md](docs/SRS.md) §16. Tick items 
 
 ## Talk (`talk/`)
 
-- [ ] Six slides
-- [ ] Safety line included
-- [ ] Published literature figure chosen and cited
+- [x] Six slides: https://claude.ai/artifact/X3xYC58YmNxFv9gk1rRRY1 (private; share it or download PDF/PPTX)
+- [x] Safety line included
+- [x] Published literature figure chosen and cited (2018 AHA/ASA, 20 min imaging target; on board and slide 5)
 - [ ] Two timed runs on hotspot
 
 ## Acceptance (PROJECT.md) — all must be true Sun 11:30
@@ -49,14 +49,13 @@ Task checklist against the clock in [docs/SRS.md](docs/SRS.md) §16. Tick items 
 - [x] Prep lead time shows 8 min for A
 - [x] Fixture B one click away: P3, cubicle, limb x-ray
 - [x] `pytest` green
-- [ ] Safety line in talk
+- [x] Safety line in talk
 - [ ] Works on hotspot with hall Wi-Fi off
 - [x] API key only in `.env` (gitignored, checked)
 
 ## Notes
 
 - Speech, vision and extraction code is written against Groq but **not yet run live**. It needs `GROQ_API_KEY`.
-- The literature figure in `app.py` (`LITERATURE`) needs checking by the talk owner before the demo.
 - `audio.wav` plan: generate it from `note.txt` with TTS (Groq Orpheus or an offline engine). No public dataset has our scripts.
 - With the human-read photo numbers, the rules give A = P1 (resus bay, CT, senior review) and B = P3 (cubicle, limb x-ray), matching `expected.json`.
 - Fixture B risk: the photo also shows an arterial line at 100/59. The vision prompt says to prefer the cuff NBP. Watch this on the first live run.

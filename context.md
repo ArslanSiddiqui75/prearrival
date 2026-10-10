@@ -78,6 +78,7 @@ See [progress.md](progress.md) for the task checklist. Headline as of the last u
 
 Newest first. One or two lines per session: what changed, what's next.
 
+- 2026-10-10 11:40 PKT — Six-slide deck published as a claude.ai Slides artifact (https://claude.ai/artifact/X3xYC58YmNxFv9gk1rRRY1). talk/SCRIPT.md rewritten to match. Literature figure corrected to the 2018 AHA/ASA guideline (the 2019 update dropped the 20-minute number). Remaining: hotspot test, rehearsals, merge to main.
 - 2026-10-10 11:20 PKT — Generated audio.wav for A and B with Groq Orpheus TTS. Full live pipeline passes for both fixtures (18:00 milestone done). Models: whisper-large-v3-turbo, qwen/qwen3.8-27b, openai/gpt-oss-120b. Watch the free-tier vision rate limit (see progress.md). Next: talk slides, literature figure, hotspot test.
 - 2026-10-10 11:05 PKT — Accepted the repo invite as KodeeBz and pushed `machine/adan`. Push from this machine with `flatpak-spawn --host git push`, because VS Code runs in a Flatpak sandbox and gh only exists on the host.
 - 2026-10-10 10:55 PKT — Implemented news/decide (12 tests pass), Groq calls (untested live, no key yet), board, and switched to Groq. Added fixture photos and photo.json. pip is slow on this network.
