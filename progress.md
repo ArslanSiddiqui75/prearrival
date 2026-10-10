@@ -64,4 +64,4 @@ Task checklist against the clock in [docs/SRS.md](docs/SRS.md) §16. Tick items 
 - Latency is about 9 s per run. STT and vision now run in parallel; STT switched to whisper-large-v3-turbo.
 - **Free-tier rate limit:** the vision model allows 1000 output tokens/min. Each photo read is about 180 tokens (capped at 300), so stay under about 3 Send-live clicks per minute. Before the demo, don't spam-click during rehearsal right before the slot. A Groq Dev Tier upgrade removes this risk.
 - Still to test: a run on the phone hotspot, and two timed rehearsals.
-- 11:30 Live mic added (opt-in \"Voice note: Live mic\" on the board, `st.audio_input`). Tested with an unscripted chest-pain utterance: ETA 10, chest_pain, alert, RR 24, on oxygen extracted correctly. Whisper gets a vocabulary-only prompt. Needs one real-voice test on the presenting laptop.
+- 11:30 Live mic added (opt-in "Voice note: Live mic" on the board, `st.audio_input`). Tested with an unscripted chest-pain utterance: ETA 10, chest_pain, alert, RR 24, on oxygen extracted correctly. Whisper gets a vocabulary-only prompt. Needs one real-voice test on the presenting laptop.
